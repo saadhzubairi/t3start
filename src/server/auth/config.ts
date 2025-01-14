@@ -53,4 +53,8 @@ export const authConfig = {
       },
     }),
   },
+  pages: {
+    signIn: "/login", // Custom login page
+    error: "/login",   // Custom error page
+  },
 } satisfies NextAuthConfig;
