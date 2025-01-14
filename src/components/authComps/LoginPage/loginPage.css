@@ -1,0 +1,10 @@
+.LoginPane{
+    width: 100%;
+    max-width: 70rem;
+    aspect-ratio: 3 / 2;
+    background-color: #f7f8f5;
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
