@@ -1,3 +1,4 @@
+
 import React from 'react'
 import LoginPage from '~/components/authComps/LoginPage/LoginPage'
 
@@ -9,4 +10,4 @@ const page = () => {
     )
 }
 
-export default page 
+export default page

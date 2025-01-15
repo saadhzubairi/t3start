@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import "./loginPage.css"
 import Image from 'next/image'
 import { FaDiscord, FaGoogle } from "react-icons/fa";
@@ -20,8 +20,9 @@ import {
   FormLabel,
 } from "~/components/ui/form"
 import { signIn } from 'next-auth/react';
-
-
+import { useSearchParams } from 'next/navigation';
+import { useToast } from '~/hooks/use-toast';
+import { ToastAction } from "~/components/ui/toast"
 
 const formSchema = z.object({
   email: z
@@ -34,7 +35,6 @@ const formSchema = z.object({
 })
 
 const LoginPage = () => {
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -42,17 +42,34 @@ const LoginPage = () => {
       password: ""
     },
   })
-
-  // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
     console.log(values)
   }
 
+  const searchParams = useSearchParams()
+  const error = searchParams.get('error')
+
+  const { toast } = useToast()
+
+  useEffect(() => {
+    const calltoast = () => {
+      toast({
+        title: "Scheduled: Catch up",
+        description: "Friday, February 10, 2023 at 5:57 PM",
+      })
+      console.log("OTSASD ASD ");
+
+    }
+
+    if (error === "OAuthCallbackError") {
+      calltoast()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <main className="p-10 flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#FCFEF1] to-[#FCFFE6] text-white">
-      <div className="LoginPane drop-shadow-2xl">
+      <div className="LoginPane drop-shadow-2xl rounded-lg">
         <div className="LoginPaneLeft h-full w-full flex justify-center items-center">
 
           <div className="flex justify-center items-center flex-col">
@@ -107,7 +124,7 @@ const LoginPage = () => {
               <Separator className='my-2' />
               <div className="w-full">
                 <div className="flex justify-between items-center w-full gap-2 flex-col">
-                  <Button className='text-custom-darkAccent text-xs w-full' variant={'outline'}>Sign up</Button>
+                  <Button className='text-custom-darkAccent text-xs w-full' variant={'outline'} onClick={() => { console.log(error) }}>Sign up</Button>
                   <Button
                     className=' text-custom-blurple hover:text-custom-blurpleHover text-xs w-full'
                     variant={'outline'}
@@ -123,7 +140,6 @@ const LoginPage = () => {
             </div>
           </div>
         </div>
-
         <div className="LoginPaneRight h-full w-full flex justify-center items-center relative">
           <Image src={'/login.jpg'} alt={''} fill style={{ objectFit: 'cover' }} />
         </div>
