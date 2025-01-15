@@ -51,20 +51,22 @@ const LoginPage = () => {
 
   const { toast } = useToast()
 
-  useEffect(() => {
-    const calltoast = () => {
-      toast({
-        title: "Scheduled: Catch up",
-        description: "Friday, February 10, 2023 at 5:57 PM",
-      })
-      console.log("OTSASD ASD ");
-
-    }
-
+  const calltoast = () => {
     if (error === "OAuthCallbackError") {
-      calltoast()
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem with signing you in. Please try again.",        
+      })
+      console.log(`THE ERROR IS ${error}`);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }
+  
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      calltoast();
+    }, 100); 
+    return () => clearTimeout(timer);
   }, []);
 
   return (
@@ -132,7 +134,16 @@ const LoginPage = () => {
                   >
                     <FaDiscord className="w-4 h-4" /> Login using Discord
                   </Button>
-                  <Button className=' text-red-300 hover:text-red-500 text-xs w-full' variant={'outline'}>
+                  <Button className=' text-red-300 hover:text-red-500 text-xs w-full' variant={'outline'}
+                    onClick={() => {
+                      toast({
+                        variant: "destructive",
+                        title: "Uh oh! Something went wrong.",
+                        description: "There was a problem with your request.",
+                        action: <ToastAction altText="Try again">Try again</ToastAction>,
+                      })
+                    }}
+                  >
                     <FaGoogle className="w-4 h-4" /> Login using Google
                   </Button>
                 </div>

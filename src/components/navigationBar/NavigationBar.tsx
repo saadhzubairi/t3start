@@ -12,20 +12,9 @@ import {
     NavigationMenuTrigger,
     navigationMenuTriggerStyle,
 } from "~/components/ui/navigation-menu"
-import {
-    Menubar,
-    MenubarContent,
-    MenubarItem,
-    MenubarMenu,
-    MenubarSeparator,
-    MenubarShortcut,
-    MenubarTrigger,
-} from "~/components/ui/menubar"
 import { buttonVariants } from "../ui/button"
-import { FaArrowAltCircleRight, FaPowerOff } from "react-icons/fa"
+import { FaArrowAltCircleRight,} from "react-icons/fa"
 import { api } from "~/trpc/server";
-import { Avatar } from "@radix-ui/react-avatar";
-import { AvatarFallback, AvatarImage } from "../ui/avatar";
 import AvatarMenu from "./AvatarMenu";
 
 
