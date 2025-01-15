@@ -68,7 +68,7 @@ const LoginPage = () => {
   }, []);
 
   return (
-    <main className="p-10 flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#FCFEF1] to-[#FCFFE6] text-white">
+    <main className="p-10 flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-custom-lightAccent to-custom-dark text-white">
       <div className="LoginPane drop-shadow-2xl rounded-lg">
         <div className="LoginPaneLeft h-full w-full flex justify-center items-center">
 

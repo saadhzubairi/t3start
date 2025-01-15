@@ -59,8 +59,8 @@ export default {
 					'5': 'hsl(var(--chart-5))'
 				},
 				custom: {
-					dark: '#A4BECC', // Replace with your color codes
-					darkAccent: '#8BA2AE',
+					dark: '#86B4CD', // Replace with your color codes
+					darkAccent: '#408AB2',
 					dim:'#B8CEE0',
 					dimAccent:'#B4C6D5',
 					mid:'#D1E0C3',
@@ -69,6 +69,7 @@ export default {
 					brightAccent:'#FCFFE6',
 					light:'#EDF4D2',
 					lightAccent:'#FCFEF1',
+					//discord color:
 					blurple: "#aabaf0",
 					blurpleHover: "#7289DA"
 				},

@@ -3,8 +3,20 @@ import "~/styles/globals.css";
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuIndicator,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  NavigationMenuViewport,
+} from "~/components/ui/navigation-menu"
+
 import { TRPCReactProvider } from "~/trpc/react";
 import { Toaster } from "~/components/ui/toaster";
+import { NavigationBar } from "~/components/navigationBar/NavigationBar";
 
 export const metadata: Metadata = {
   title: "Create T3 App",
@@ -18,8 +30,16 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
       <body>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
-        <Toaster />
+        <TRPCReactProvider>
+          <div className="flex justify-center items-center w-full fixed  z-50 p-4">
+            <div className="w-[80%] p-6 backdrop-blur-lg h-16 rounded-full bg-white/60 drop-shadow-md flex items-center justify-between flex-row ">
+              <div className="font-bold">Harmony</div>
+              <NavigationBar />
+            </div>
+          </div>
+          {children}
+          <Toaster />
+        </TRPCReactProvider>
       </body>
     </html>
   );

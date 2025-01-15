@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { LatestPost } from "~/app/_components/post";
 import LoginPage from "~/components/authComps/LoginPage/LoginPage";
+import Landing from "~/components/landing/Landing";
 import { auth } from "~/server/auth";
 import { api, HydrateClient } from "~/trpc/server";
 
@@ -65,7 +66,7 @@ export default async function Home() {
           {session?.user && <LatestPost />}
         </div>
       </main> */}
-      <LoginPage />
+      <Landing />
     </HydrateClient>
   );
 }
