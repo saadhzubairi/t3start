@@ -128,7 +128,7 @@ export async function NavigationBar() {
                         session ?
                             <AvatarMenu avatarUrl={session.user.image?.toString() ?? ""} />
                             :
-                            <Link className={buttonVariants({ variant: "default", className: "mx-2 px-6 bg-custom-darkAccent shadow-none h-9" })} href={"/login"} >Login <FaArrowAltCircleRight /></Link>
+                            <Link className={buttonVariants({ variant: "default", className: "mx-2 px-6 shadow-none h-9" })} href={"/login"} >Login <FaArrowAltCircleRight /></Link>
                     }
                 </NavigationMenuItem>
             </NavigationMenuList>
