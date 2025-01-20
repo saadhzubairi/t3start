@@ -16,7 +16,6 @@ export default function LoginLayout({
     return (
         <TRPCReactProvider>
             {children}
-            
         </TRPCReactProvider>
     );
 }

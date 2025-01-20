@@ -4,7 +4,6 @@ import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 import { TRPCReactProvider } from "~/trpc/react";
 import { Toaster } from "~/components/ui/toaster";
-import NavigationBarCraddle from "~/components/navigationBar/NavigationBarCraddle";
 
 export const metadata: Metadata = {
   title: "Harmony",
@@ -19,7 +18,6 @@ export default function RootLayout({
     <html lang="en" className={`${GeistSans.variable}`}>
       <body>
         <TRPCReactProvider>
-          <NavigationBarCraddle />
           {children}
           <Toaster />
         </TRPCReactProvider>

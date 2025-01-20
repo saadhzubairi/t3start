@@ -1,0 +1,31 @@
+@keyframes shape1 {
+
+    0%,
+    100% {
+        transform: translateX(-50%) rotate(30deg) scale(1);
+    }
+
+    50% {
+        transform: translateX(-45%) rotate(60deg) scale(1.1);
+    }
+}
+
+@keyframes shape2 {
+
+    0%,
+    100% {
+        transform: translateX(-50%) rotate(-30deg) scale(1);
+    }
+
+    50% {
+        transform: translateX(-55%) rotate(-60deg) scale(1.1);
+    }
+}
+
+.animate-shape1 {
+    animation: shape1 2s infinite ease-in-out;
+}
+
+.animate-shape2 {
+    animation: shape2 2s infinite ease-in-out;
+}
