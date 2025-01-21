@@ -1,19 +1,15 @@
-"use client"
 
 import React from 'react'
-import { signOut } from 'next-auth/react';
-import { Button } from '~/components/ui/button';
+import Dashboard from '~/components/play/Dashboard'
+import { auth } from '~/server/auth';
 
-const page = () => {
+
+const page = async () => {
+  const session = await auth();
+
   return (
-    <div className='flex w-full h-full items-center justify-center p-4'>
-      <Button
-        className=' '
-        onClick={() => signOut()}
-      >
-        Sign out!
-      </Button>
-
+    <div>
+      <Dashboard session={session} />
     </div>
   )
 }

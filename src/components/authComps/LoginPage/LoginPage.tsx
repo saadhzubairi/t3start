@@ -73,7 +73,7 @@ const LoginPage = ({ session }: { session: Session | null }) => {
     };
     checkSession().catch(() => { console.log("ERROR") });
   }, [router, session]);
-
+    
   useEffect(() => {
     const timer = setTimeout(() => {
       calltoast();
