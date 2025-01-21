@@ -20,9 +20,10 @@ import {
   FormLabel,
 } from "~/components/ui/form"
 import { signIn } from 'next-auth/react';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useToast } from '~/hooks/use-toast';
 import { ToastAction } from "~/components/ui/toast"
+import { Session } from 'next-auth';
 
 const formSchema = z.object({
   email: z
@@ -34,7 +35,7 @@ const formSchema = z.object({
     .min(1, { message: "Field cannot be empty", })
 })
 
-const LoginPage = () => {
+const LoginPage = ({ session }: { session: Session | null }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -56,16 +57,27 @@ const LoginPage = () => {
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
-        description: "There was a problem with signing you in. Please try again.",        
+        description: "There was a problem with signing you in. Please try again.",
       })
       console.log(`THE ERROR IS ${error}`);
     }
   }
-  
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const checkSession = async () => {
+      if (session?.user) {
+        router.push('/play/dashboard');
+      }
+    };
+    checkSession().catch(() => { console.log("ERROR") });
+  }, [router, session]);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       calltoast();
-    }, 100); 
+    }, 100);
     return () => clearTimeout(timer);
   }, []);
 
