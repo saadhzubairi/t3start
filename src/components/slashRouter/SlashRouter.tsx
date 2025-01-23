@@ -11,6 +11,7 @@ const SlashRouter = ({ session }: { session: Session | null  }) => {
 
     useEffect(() => {
         const checkSession = async () => {
+            await new Promise(resolve => setTimeout(resolve, 2000));
             if (session?.user) {
                 router.push('/play/dashboard');
             } else {
