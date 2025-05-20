@@ -7,6 +7,23 @@ import { Button } from '../ui/button'
 const Landing = () => {
     return (
         <div className='bg-gradient-to-b from-custom-lightAccent to-custom-dark pb-16 pt-28'>
+            {/* IMAGE CONTAINER */}
+            <div>
+                <div className='mx-auto max-w-6xl px-6 lg:px-8'>
+                    <div className='mt-16 flow-root sm:mt-24'>
+                        <div className='-m-2 rounded-xl bg-gray-900/5 p-2  lg:-m-4 lg:rounded-2xl lg:p-4'>
+                            <Image
+                                src='/Landing/nyc.png'
+                                alt='product preview'
+                                width={1364}
+                                height={866}
+                                quality={100}
+                                className='rounded-md bg-white shadow-2xl'
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div className='flex flex-col items-center justify-center text-center gap-4'>
                 <div className="mx-auto mb-4 flex max-w-fit items-center justify-center space-x-2 overflow-hidden rounded-full border border-gray-200 bg-white px-7 py-2 shadow-md backdrop-blur transition-all hover:border-gray-300 hover:bg-white/50">
@@ -38,23 +55,7 @@ const Landing = () => {
                         />
                     </div>
 
-                    {/* IMAGE CONTAINER */}
-                    <div>
-                        <div className='mx-auto max-w-6xl px-6 lg:px-8'>
-                            <div className='mt-16 flow-root sm:mt-24'>
-                                <div className='-m-2 rounded-xl bg-gray-900/5 p-2  lg:-m-4 lg:rounded-2xl lg:p-4'>
-                                    <Image
-                                        src='/Landing/nyc.png'
-                                        alt='product preview'
-                                        width={1364}
-                                        height={866}
-                                        quality={100}
-                                        className='rounded-md bg-white shadow-2xl'
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
 
                     <div
                         aria-hidden='true'
