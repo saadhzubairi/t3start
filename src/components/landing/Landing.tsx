@@ -12,7 +12,7 @@ const Landing = () => {
                 <div className="mx-auto mb-4 flex max-w-fit items-center justify-center space-x-2 overflow-hidden rounded-full border border-gray-200 bg-white px-7 py-2 shadow-md backdrop-blur transition-all hover:border-gray-300 hover:bg-white/50">
                     <p className="text-sm font-semibold text-gray-700">Harmony is now live!</p>
                 </div>
-                <h1 className="max-w-4xl text-5xl font-bold md:text-6xl sm:text-6xl lg:text7xl">Teach without <span className="text-custom-darkAccent">limits</span> like your students deserve.</h1>
+                <h1 className="max-w-4xl text-5xl font-bold md:text-6xl sm:text-6xl lg:text7xl">Discuss styles that defined <span className='text-custom-darkAccent'>generations</span> .</h1>
                 <p className="mt-5 max-w-prose text-zinc-500 sm:text-lg">Harmony allows you to teach your students with modern generative AI-based real-time teaching aids that take your tutoring business to the next level.</p>
                 <Button className='bg-custom-darkAccent' >Get started <FaArrowRight className='ml-2.5 w-5 h-5' /></Button>
             </div>
@@ -42,14 +42,14 @@ const Landing = () => {
                     <div>
                         <div className='mx-auto max-w-6xl px-6 lg:px-8'>
                             <div className='mt-16 flow-root sm:mt-24'>
-                                <div className='-m-2 rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:-m-4 lg:rounded-2xl lg:p-4'>
+                                <div className='-m-2 rounded-xl bg-gray-900/5 p-2  lg:-m-4 lg:rounded-2xl lg:p-4'>
                                     <Image
-                                        src='/LP2.webp'
+                                        src='/Landing/nyc.png'
                                         alt='product preview'
                                         width={1364}
                                         height={866}
                                         quality={100}
-                                        className='rounded-md bg-white shadow-2xl ring-1 ring-gray-900/10'
+                                        className='rounded-md bg-white shadow-2xl'
                                     />
                                 </div>
                             </div>
