@@ -8,6 +8,7 @@ import ScrollAnimated from '~/components/misc/ScrollAnimated'
 import { AuthorCard, Author } from "./AuthorCard"; // Adjust path
 import { ArticleCard, Article } from "./ArticleCard"; // Adjust path
 import { Scroll } from 'lucide-react'
+import Footer from './Footer'
 
 // --- Mock Data (Replace with your actual data fetching logic) ---
 const mockAuthors: Author[] = [
@@ -26,7 +27,7 @@ const mockArticles: Article[] = [
 
 const Landing = () => {
   return (
-    <div className='bg-gradient-to-b from-custom-lightAccent to-custom-darkAccent pb-16 min-h-screen flex flex-col'>
+    <div className='bg-gradient-to-b from-custom-lightAccent to-custom-darkAccent min-h-screen flex flex-col'>
       {/* HERO SECTION */}
       <div className='relative h-[70vh] md:h-[85vh] w-full flex items-center justify-center text-center overflow-hidden'>
         {/* Background Image with Gradient Overlay */}
@@ -152,7 +153,7 @@ const Landing = () => {
 
 
       {/* Decorative Abstract Shapes - Kept subtle */}
-      < div className='relative isolate -z-10' >
+      {/* < div className='relative isolate -z-10' >
         <div
           aria-hidden='true'
           className='pointer-events-none absolute inset-x-0 -top-80 transform-gpu overflow-hidden blur-3xl sm:-top-[20rem]' // Adjusted position
@@ -177,10 +178,14 @@ const Landing = () => {
             className='relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-custom-brightAccent to-custom-darkAccent opacity-15 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]' // Reduced opacity
           />
         </div>
-      </div >
-
+      </div > */}
+      <Footer />
     </div >
   )
 }
+
+
+
+
 
 export default Landing

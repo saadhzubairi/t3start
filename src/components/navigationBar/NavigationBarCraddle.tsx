@@ -8,7 +8,7 @@ import { ModeToggle } from './DarkModeToggle'
 const NavigationBarCraddle = () => {
     return (
         <div className="flex justify-center items-center w-full fixed  z-50 p-4">
-            <div className="w-[80%] p-6 backdrop-blur-lg h-16 rounded-full bg-white/80 dark:bg-gray-800/60 drop-shadow-md flex items-center justify-between flex-row ">
+            <div className="w-[80%] p-5 backdrop-blur-lg h-16 rounded-full bg-white/80 dark:bg-secondary/60 drop-shadow-md flex items-center justify-between flex-row ">
                 <div className="ml-4">
                     <ViewfinderLogo size="1.5rem" className='mr-4' />
                     <ModeToggle />

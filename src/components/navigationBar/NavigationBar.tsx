@@ -17,7 +17,7 @@ import { api } from "~/trpc/server";
 import AvatarMenu from "./AvatarMenu";
 
 
- const components: { title: string; href: string; description: string }[] = [
+const components: { title: string; href: string; description: string }[] = [
     {
         title: "Power & Politics",
         href: "/tags/art-deco",
@@ -153,7 +153,7 @@ export async function NavigationBar() {
                     </NavigationMenuContent>
                 </NavigationMenuItem>
                 {/* Using the new NavLinkItem component */}
-                
+
                 <NavLinkItem href="/docs/theory-practice">Field Notes</NavLinkItem>
                 <NavLinkItem href="/docs/theory-practice">Editorials</NavLinkItem>
                 <NavigationMenuItem>
@@ -161,7 +161,11 @@ export async function NavigationBar() {
                         session ?
                             <AvatarMenu avatarUrl={session.user.image?.toString() ?? ""} />
                             :
-                            <Link className={buttonVariants({ variant: "outline", className: "mx-2 px-6 shadow-none h-9 rounded-full" })} href={"/login"} >Login <FaArrowAltCircleRight /></Link>
+                            <Link
+                                className={cn(buttonVariants({ variant: "outline" }),"rounded-full")}
+                                href={"/login"} >
+                                Login <FaArrowAltCircleRight />
+                            </Link>
                     }
                 </NavigationMenuItem>
             </NavigationMenuList>
