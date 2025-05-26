@@ -7,6 +7,7 @@ import ScrollAnimated from '~/components/misc/ScrollAnimated'
 
 import { AuthorCard, Author } from "./AuthorCard"; // Adjust path
 import { ArticleCard, Article } from "./ArticleCard"; // Adjust path
+import { Scroll } from 'lucide-react'
 
 // --- Mock Data (Replace with your actual data fetching logic) ---
 const mockAuthors: Author[] = [
@@ -63,83 +64,74 @@ const Landing = () => {
 
       {/* MAIN CONTENT SECTION */}
       < div className='flex-grow container mx-auto px-6 lg:px-8 py-16' >
+        {/* Featured Articles Section */}
         <ScrollAnimated>
-          {/* Featured Articles Section */}
-          <section id="featured-articles" className='mb-24'>
-            <div className='max-w-3xl mx-auto text-center mb-12'>
-              <h2 className='text-3xl sm:text-4xl font-bold mb-4 text-gray-900 dark:text-gray-100'>
-                Featured Insights
+          <section className="pb-6 px-6 pt-10 bg-custom-stone-100/50 dark:bg-secondary/30 rounded-3xl">
+            <div className="container">
+              <h2 className="text-3xl sm:text-4xl font-bold text-center mb-3">
+                Latest Articles
               </h2>
-              <p className='text-lg text-zinc-400'>
-                Dive into our latest explorations of architectural marvels and design philosophies.
+              <p className="text-center text-muted-foreground mb-10 sm:mb-12 max-w-xl mx-auto">
+                Dive into our newest selection of articles, offering fresh perspectives and valuable insights.
               </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                {mockArticles.map(article => (
+                  <ArticleCard key={article.id} article={article} />
+                ))}
+              </div>
             </div>
-
-            {/* Example Article Cards - Replace with dynamic content */}
-
           </section>
         </ScrollAnimated>
 
         {/* Featured Authors Section */}
-        <section className="py-12 sm:py-20">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl sm:text-4xl font-bold text-center mb-3">
-              Featured Authors
-            </h2>
-            <p className="text-center text-muted-foreground mb-10 sm:mb-12 max-w-xl mx-auto">
-              Meet the brilliant minds shaping our community and contributing their expertise.
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-              {mockAuthors.map(author => (
-                <AuthorCard key={author.id} author={author} />
-              ))}
+        <ScrollAnimated>
+          <section className="py-12 sm:py-20">
+            <div className="container mx-auto px-4">
+              <h2 className="text-3xl sm:text-4xl font-bold text-center mb-3">
+                Featured Authors
+              </h2>
+              <p className="text-center text-muted-foreground mb-10 sm:mb-12 max-w-xl mx-auto">
+                Meet the brilliant minds shaping our community and contributing their expertise.
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+                {mockAuthors.map(author => (
+                  <AuthorCard key={author.id} author={author} />
+                ))}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </ScrollAnimated>
 
-        {/* Featured Articles Section */}
-        <section className="py-12 sm:py-20 bg-secondary/30 dark:bg-secondary/20">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl sm:text-4xl font-bold text-center mb-3">
-              Latest Articles
-            </h2>
-            <p className="text-center text-muted-foreground mb-10 sm:mb-12 max-w-xl mx-auto">
-              Dive into our newest selection of articles, offering fresh perspectives and valuable insights.
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-              {mockArticles.map(article => (
-                <ArticleCard key={article.id} article={article} />
-              ))}
-            </div>
-          </div>
-        </section>
+
 
         <ScrollAnimated>
           {/* About Section - Optional */}
-          <section className='mb-24'>
+          <section className='my-24'>
             <div className='max-w-3xl mx-auto text-center'>
-              <h2 className='text-3xl sm:text-4xl font-bold text-gray-100 mb-4'>
+              <h2 className='text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4'>
                 About Harmony Arch
               </h2>
-              <p className='text-lg text-zinc-400 mb-6'>
+              <p className='text-lg text-gray-600 dark:text-zinc-400 mb-6'>
                 Harmony Arch is a curated space for architects, designers, and enthusiasts to explore the evolving world of architecture. We delve into groundbreaking projects, innovative materials, and the philosophies that shape our built environment. Our mission is to inspire and inform, fostering a deeper appreciation for the art and science of architecture.
               </p>
               <Link href="/about" passHref>
-                <Button variant="outline" className='bg-transparent border-custom-midAccent text-custom-midAccent hover:bg-custom-midAccent hover:text-custom-dark transition-colors duration-300 text-md px-6 py-2.5'>
+                <Button variant="outline" className='bg-transparent border-gray-700 dark:border-custom-midAccent text-gray-700 dark:text-custom-midAccent hover:bg-gray-700 hover:text-white dark:hover:bg-custom-midAccent dark:hover:text-custom-dark transition-colors duration-300 text-md px-6 py-2.5'>
                   Learn More About Us
                 </Button>
               </Link>
             </div>
           </section>
         </ScrollAnimated>
+
+
         <ScrollAnimated>
           {/* Call to Action / Subscribe Section */}
-          <section className='bg-custom-mid/20 backdrop-blur-sm p-8 md:p-12 rounded-xl shadow-lg'>
+          <section className=' bg-custom-stone-100/50 dark:bg-secondary/30 backdrop-blur-sm p-8 md:p-12 rounded-3xl'>
             <div className='max-w-2xl mx-auto text-center'>
               <h2 className='text-2xl sm:text-3xl font-bold text-custom-lightAccent mb-4'>
                 Stay Inspired
               </h2>
-              <p className='text-zinc-300 mb-6'>
+              <p className='text-gray-700 dark:text-zinc-300 mb-6'>
                 Subscribe to our newsletter for the latest articles, interviews, and architectural showcases delivered straight to your inbox.
               </p>
               <form className='flex flex-col sm:flex-row gap-4 max-w-md mx-auto'>
@@ -149,7 +141,7 @@ const Landing = () => {
                   className='flex-grow p-3 rounded-md bg-custom-light/10 border border-custom-midAccent text-zinc-200 placeholder-zinc-400 focus:ring-2 focus:ring-custom-brightAccent focus:border-custom-brightAccent outline-none'
                   required
                 />
-                <Button type='submit' className='bg-custom-darkAccent hover:bg-opacity-80 text-white text-md px-6 py-3'>
+                <Button type='submit' className=' hover:bg-opacity-80  text-md px-6 py-3 h-full'>
                   Subscribe <FaArrowRight className='ml-2 w-4 h-4' />
                 </Button>
               </form>

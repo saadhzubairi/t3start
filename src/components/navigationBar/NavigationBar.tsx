@@ -1,4 +1,3 @@
-
 import * as React from "react"
 import Link from "next/link"
 import { auth } from "~/server/auth";
@@ -13,48 +12,73 @@ import {
     navigationMenuTriggerStyle,
 } from "~/components/ui/navigation-menu"
 import { buttonVariants } from "../ui/button"
-import { FaArrowAltCircleRight,} from "react-icons/fa"
+import { FaArrowAltCircleRight, } from "react-icons/fa"
 import { api } from "~/trpc/server";
 import AvatarMenu from "./AvatarMenu";
 
 
-const components: { title: string; href: string; description: string }[] = [
+ const components: { title: string; href: string; description: string }[] = [
     {
-        title: "Alert Dialog",
-        href: "/docs/primitives/alert-dialog",
-        description:
-            "A modal dialog that interrupts the user with important content and expects a response.",
+        title: "Power & Politics",
+        href: "/tags/art-deco",
+        description: "Exploring the geometry, glamour, and industrial optimism of the Art Deco movement.",
     },
     {
-        title: "Hover Card",
-        href: "/docs/primitives/hover-card",
-        description:
-            "For sighted users to preview content available behind a link.",
+        title: "Language & Symbolism",
+        href: "/tags/brutalism",
+        description: "Monolithic concrete, raw aesthetics, and architectural honesty—Brutalism’s legacy and revival.",
     },
     {
-        title: "Progress",
-        href: "/docs/primitives/progress",
-        description:
-            "Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.",
+        title: "Material & Craft",
+        href: "/tags/urbanism",
+        description: "Design, density, and power—how cities shape and are shaped by people.",
     },
     {
-        title: "Scroll-area",
-        href: "/docs/primitives/scroll-area",
-        description: "Visually or semantically separates content.",
+        title: "Cities & Typologies",
+        href: "/tags/adaptive-reuse",
+        description: "How old structures find new purpose through thoughtful redesign and restoration.",
     },
     {
-        title: "Tabs",
-        href: "/docs/primitives/tabs",
-        description:
-            "A set of layered sections of content—known as tab panels—that are displayed one at a time.",
+        title: "Histories & Lineages",
+        href: "/tags/material-studies",
+        description: "Stone, steel, glass, and more—materials as narrative devices in built form.",
     },
     {
-        title: "Tooltip",
-        href: "/docs/primitives/tooltip",
-        description:
-            "A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.",
-    },
-]
+        title: "Tools & Techniques",
+        href: "/tags/architectural-theory",
+        description: "Critical thought, design ideologies, and the philosophies behind architectural movements.",
+    }
+];
+
+interface NavLinkItemProps {
+    href: string;
+    children: React.ReactNode;
+}
+
+const NavLinkItem: React.FC<NavLinkItemProps> = ({ href, children }) => {
+    return (
+        <NavigationMenuItem>
+            <Link href={href} legacyBehavior passHref>
+                <NavigationMenuLink
+                    className={cn(
+                        navigationMenuTriggerStyle(),                // 1. Apply base Shadcn styles
+                        "bg-transparent",                            // 2. Override default background to transparent
+                        "text-neutral-900 dark:text-neutral-100",    // 3. Set text color: dark text for light mode, light text for dark mode
+                        "hover:bg-neutral-200 dark:hover:bg-neutral-700/60", // 4. Hover background: light grey for light mode, dark grey for dark mode
+                        "hover:text-neutral-900 dark:hover:text-neutral-100", // 5. Ensure text color matches mode on hover
+                        "focus:bg-neutral-200 dark:focus:bg-neutral-700/60", // 6. Consistent focus style for both modes
+                        "focus:text-neutral-900 dark:focus:text-neutral-100", //
+                        "data-[active]:bg-neutral-300 dark:data-[active]:bg-neutral-600/75", // 7. Active link style for both modes
+                        "data-[active]:text-neutral-900 dark:data-[active]:text-neutral-100" //
+                    )}
+                >
+                    {children}
+                </NavigationMenuLink>
+            </Link>
+        </NavigationMenuItem>
+    );
+};
+
 
 export async function NavigationBar() {
 
@@ -67,7 +91,7 @@ export async function NavigationBar() {
     return (
         <NavigationMenu>
             <NavigationMenuList>
-                <NavigationMenuItem>
+                {/* <NavigationMenuItem>
                     <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
                     <NavigationMenuContent>
                         <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
@@ -99,9 +123,21 @@ export async function NavigationBar() {
                             </ListItem>
                         </ul>
                     </NavigationMenuContent>
-                </NavigationMenuItem>
+                </NavigationMenuItem> */}
                 <NavigationMenuItem>
-                    <NavigationMenuTrigger>Components</NavigationMenuTrigger>
+                    <NavigationMenuTrigger
+                        className={cn(
+                            navigationMenuTriggerStyle(),                // 1. Apply base Shadcn styles
+                            "bg-transparent",                            // 2. Override default background to transparent
+                            "text-neutral-900 dark:text-neutral-100",    // 3. Set text color: dark text for light mode, light text for dark mode
+                            "hover:bg-neutral-200 dark:hover:bg-neutral-700/60", // 4. Hover background: light grey for light mode, dark grey for dark mode
+                            "hover:text-neutral-900 dark:hover:text-neutral-100", // 5. Ensure text color matches mode on hover
+                            "focus:bg-neutral-200 dark:focus:bg-neutral-700/60", // 6. Consistent focus style for both modes
+                            "focus:text-neutral-900 dark:focus:text-neutral-100", //
+                            "data-[active]:bg-neutral-300 dark:data-[active]:bg-neutral-600/75", // 7. Active link style for both modes
+                            "data-[active]:text-neutral-900 dark:data-[active]:text-neutral-100" //
+                        )}
+                    >Tags</NavigationMenuTrigger>
                     <NavigationMenuContent>
                         <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
                             {components.map((component) => (
@@ -116,19 +152,16 @@ export async function NavigationBar() {
                         </ul>
                     </NavigationMenuContent>
                 </NavigationMenuItem>
-                <NavigationMenuItem>
-                    <Link href="/docs" legacyBehavior passHref>
-                        <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                            Documentation
-                        </NavigationMenuLink>
-                    </Link>
-                </NavigationMenuItem>
+                {/* Using the new NavLinkItem component */}
+                
+                <NavLinkItem href="/docs/theory-practice">Field Notes</NavLinkItem>
+                <NavLinkItem href="/docs/theory-practice">Editorials</NavLinkItem>
                 <NavigationMenuItem>
                     {
                         session ?
                             <AvatarMenu avatarUrl={session.user.image?.toString() ?? ""} />
                             :
-                            <Link className={buttonVariants({ variant: "default", className: "mx-2 px-6 shadow-none h-9" })} href={"/login"} >Login <FaArrowAltCircleRight /></Link>
+                            <Link className={buttonVariants({ variant: "outline", className: "mx-2 px-6 shadow-none h-9 rounded-full" })} href={"/login"} >Login <FaArrowAltCircleRight /></Link>
                     }
                 </NavigationMenuItem>
             </NavigationMenuList>
@@ -163,3 +196,8 @@ const ListItem = React.forwardRef<
 ListItem.displayName = "ListItem"
 
 /* <Button className="mx-2 px-6 bg-custom-darkAccent shadow-none h-9" variant={'default'} onClick={() =>} >Login <FaArrowAltCircleRight /></Button> */
+
+
+
+
+
