@@ -1,20 +1,15 @@
 "use client";
 // components/Logo.tsx
 import Link from 'next/link';
-import { Major_Mono_Display } from 'next/font/google'; // Corrected import name
-import React from 'react';
+import { Lobster } from 'next/font/google'; // Corrected import name and removed unused fonts
+import React, { useState, useEffect } from 'react'; // Import useState and useEffect
 import { useTheme } from 'next-themes';
 
 // Initialize the Major Mono Display font
-// This setup allows Next.js to optimize font loading.
-// Major Mono Display typically only supports a '400' (Regular) weight.
-// Setting a different weight (e.g., '700', '900', or 'bold') in the options below
-// will likely have no visual effect as the font file itself does not contain other weights.
-// The browser will render the available '400' weight.
-const majorMonoDisplay = Major_Mono_Display({
-  weight: '400', // '400' is the standard and generally only available weight for Major Mono Display.
+const majorMonoDisplay = Lobster({
+  weight: '400',
   subsets: ['latin'],
-  display: 'swap', // Ensures text is visible while the font loads
+  display: 'swap',
 });
 
 // Define the props for the Logo component
@@ -27,24 +22,40 @@ interface LogoProps {
 /**
  * ViewfinderLogo component.
  * Displays the "Viewfinder" text as a link, styled with the Major Mono Display font.
- * Allows customization of size and color through props.
+ * Adjusts color based on the current theme, preventing hydration errors.
  */
 const ViewfinderLogo: React.FC<LogoProps> = ({
-  size = '2rem', // Default font size
-  href = '/', // Default link to homepage
-  className = '', // Default empty className
+  size = '2rem',
+  href = '/',
+  className = '',
 }) => {
+  const { theme, resolvedTheme } = useTheme(); // Get both theme and resolvedTheme
+  const [mounted, setMounted] = useState(false); // State to track if component is mounted
 
-  const { theme } = useTheme();
+  // useEffect to set mounted to true after hydration
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Determine the color based on the resolved theme AFTER hydration
+  const textColor = mounted ? (resolvedTheme === 'light' ? 'black' : 'white') : 'black'; // Default to black during SSR/initial hydration for consistency or a fallback
+
+  // If you strictly want the system theme before mount,
+  // or a consistent SSR color, you could also do:
+  // const textColor = resolvedTheme === 'light' ? 'black' : 'white';
+  // And apply a `key` prop to the span if still getting hydration errors,
+  // or use `mounted &&` for the span directly, but the current approach
+  // with a fallback color during SSR is generally safer.
+
   return (
     <Link href={href} passHref>
-      <span // Using a span for the text itself to apply styles
-        className={`${majorMonoDisplay.className} ${className} transition-opacity hover:opacity-80`} // Apply the font class and any additional classes
+      <span
+        className={`${majorMonoDisplay.className} ${className} transition-opacity hover:opacity-80`}
         style={{
           fontSize: size,
-          color: theme === 'light' ? 'black' : 'white', // Adjust color based on theme
-          lineHeight: 1, // Often good for single-line display fonts to prevent extra spacing
-          textDecoration: 'none', // Ensuring no underline from the link by default on the span
+          color: textColor, // Use the dynamically determined color
+          lineHeight: 1,
+          textDecoration: 'none',
         }}
       >
         Viewfinder
@@ -54,20 +65,3 @@ const ViewfinderLogo: React.FC<LogoProps> = ({
 };
 
 export default ViewfinderLogo;
-
-// How to use it in another component:
-/*
-import ViewfinderLogo from './components/Logo'; // Adjust path as needed
-
-function Header() {
-  return (
-    <header className="p-4 bg-gray-800">
-      <ViewfinderLogo size="2.5rem" color="#FFFFFF" />
-      {/* Or using Tailwind for color if you have it defined *\/}
-      {/* <ViewfinderLogo size="32px" className="text-custom-sky-deep" /> *\/}
-    </header>
-  );
-}
-
-export default Header;
-*/
