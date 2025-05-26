@@ -24,6 +24,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useToast } from '~/hooks/use-toast';
 import { ToastAction } from "~/components/ui/toast"
 import { Session } from 'next-auth';
+import ViewfinderLogo from '~/components/misc/Logo';
 
 const formSchema = z.object({
   email: z
@@ -82,12 +83,14 @@ const LoginPage = ({ session }: { session: Session | null }) => {
   }, []);
 
   return (
-    <main className="p-10 flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-custom-lightAccent to-custom-dark text-white">
+    <main className="p-10 flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-custom-stone-50 to-custom-stone-100 text-white">
       <div className="LoginPane drop-shadow-2xl rounded-lg">
         <div className="LoginPaneLeft h-full w-full flex justify-center items-center">
 
           <div className="flex justify-center items-center flex-col">
-            <h1 className='font-thin text-6xl mb-12'>Harmony</h1>
+            
+            
+            <div className='font-thin text-6xl mb-12'><ViewfinderLogo size="2.5rem" color="black" /></div>
             <div className="flex justify-center items-start flex-col gap-4">
               <div className="flex flex-col">
                 <div className="">
@@ -129,7 +132,7 @@ const LoginPage = ({ session }: { session: Session | null }) => {
                   </div>
                   <div className="">
                     <div className="flex justify-between items-center w-full gap-4">
-                      <Button className='bg-custom-darkAccent px-4 py-2 w-28' type="submit">Login</Button>
+                      <Button className='px-4 py-2 w-28' type="submit">Login</Button>
                       <Button className='text-custom-darkAccent text-xs' variant={'link'}>Having trouble?</Button>
                     </div>
                   </div>

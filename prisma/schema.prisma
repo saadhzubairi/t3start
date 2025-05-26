@@ -1,74 +1,112 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// prisma/schema.prisma
 
 generator client {
     provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "mongodb"
+    provider = "postgresql"
     url      = env("DATABASE_URL")
 }
 
+enum ROLE {
+    ADMIN
+    USER
+    SUPERADMIN
+}
+
+// USERS ----------------------------------------------------------------------
+
+model User {
+    id            String    @id @default(uuid()) @db.Uuid
+    name          String?
+    email         String?   @unique
+    emailVerified DateTime?
+    image         String?
+    role          ROLE      @default(USER)
+    active        Boolean   @default(true)
+    createdAt     DateTime  @default(now())
+    updatedAt     DateTime  @updatedAt
+
+    // relations
+    posts    Post[]
+    comments Comment[]
+    accounts Account[]
+    sessions Session[]
+}
+
+// POSTS ----------------------------------------------------------------------
+
 model Post {
-    id        String   @id @default(auto()) @map("_id") @db.ObjectId
-    name      String
+    id        String   @id @default(uuid()) @db.Uuid
+    title     String
+    content   String?
+    published Boolean  @default(false)
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    createdBy   User   @relation(fields: [createdById], references: [id])
-    createdById String
+    // author relation
+    author   User   @relation(fields: [authorId], references: [id])
+    authorId String @db.Uuid
 
-    @@index([name])
+    // comments on this post
+    comments Comment[]
+
+    @@index([title])
 }
 
-// Necessary for Next auth
+// COMMENTS -------------------------------------------------------------------
+
+model Comment {
+    id        String   @id @default(uuid()) @db.Uuid
+    text      String
+    createdAt DateTime @default(now())
+
+    // which post
+    post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+    postId String @db.Uuid
+
+    // which user wrote it
+    author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+    authorId String @db.Uuid
+}
+
+// NEXTAUTH: ACCOUNTS, SESSIONS, VERIFICATION TOKENS -------------------------
+
 model Account {
-    id                       String  @id @default(auto()) @map("_id") @db.ObjectId
-    userId                   String
+    id                       String  @id @default(uuid()) @db.Uuid
+    userId                   String  @db.Uuid
     type                     String
     provider                 String
     providerAccountId        String
-    refresh_token            String? // @db.Text
-    access_token             String? // @db.Text
+    refresh_token            String? // use @db.Text if tokens get large
+    access_token             String?
     expires_at               Int?
     token_type               String?
     scope                    String?
-    id_token                 String? // @db.Text
+    id_token                 String?
     session_state            String?
-    user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
     refresh_token_expires_in Int?
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     @@unique([provider, providerAccountId])
 }
 
 model Session {
-    id           String   @id @default(auto()) @map("_id") @db.ObjectId
+    id           String   @id @default(uuid()) @db.Uuid
     sessionToken String   @unique
-    userId       String
+    userId       String   @db.Uuid
     expires      DateTime
-    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
 
-model User {
-    id            String    @id @default(auto()) @map("_id") @db.ObjectId
-    name          String?
-    email         String?   @unique
-    emailVerified DateTime?
-    image         String?
-    accounts      Account[]
-    sessions      Session[]
-    posts         Post[]
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model VerificationToken {
+    id         String   @id @default(uuid()) @db.Uuid
     identifier String
     token      String   @unique
     expires    DateTime
-    user       User     @relation(fields: [identifier], references: [id], onDelete: Cascade)
-    // The identifier is the userId, so we need to use a composite unique index
-    // to ensure that the combination of identifier and token is unique
-    @@id([identifier, token])
 
     @@unique([identifier, token])
 }
