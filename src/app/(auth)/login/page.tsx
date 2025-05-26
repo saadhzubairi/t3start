@@ -1,6 +1,6 @@
 
 import React from 'react'
-import LoginPage from '~/components/authComps/LoginPage/LoginPage'
+import LoginPage from '~/components/main/auth/login/LoginPage';
 import { auth } from '~/server/auth';
 
 const page = async () => {

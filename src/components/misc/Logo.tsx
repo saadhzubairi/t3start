@@ -1,7 +1,9 @@
+"use client";
 // components/Logo.tsx
 import Link from 'next/link';
 import { Major_Mono_Display } from 'next/font/google'; // Corrected import name
 import React from 'react';
+import { useTheme } from 'next-themes';
 
 // Initialize the Major Mono Display font
 // This setup allows Next.js to optimize font loading.
@@ -17,24 +19,8 @@ const majorMonoDisplay = Major_Mono_Display({
 
 // Define the props for the Logo component
 interface LogoProps {
-  /**
-   * The font size for the logo. Can be any valid CSS font-size value (e.g., '2rem', '24px').
-   * Defaults to '2rem'.
-   */
   size?: string;
-  /**
-   * The color of the logo text. Can be any valid CSS color value (e.g., '#FF0000', 'blue', 'var(--custom-color)').
-   * Defaults to 'inherit', which will take the color from its parent element.
-   */
-  color?: string;
-  /**
-   * The destination URL for the link.
-   * Defaults to '/'.
-   */
   href?: string;
-  /**
-   * Optional additional className for further Tailwind CSS or custom styling.
-   */
   className?: string;
 }
 
@@ -45,17 +31,18 @@ interface LogoProps {
  */
 const ViewfinderLogo: React.FC<LogoProps> = ({
   size = '2rem', // Default font size
-  color = 'inherit', // Default color
   href = '/', // Default link to homepage
   className = '', // Default empty className
 }) => {
+
+  const { theme } = useTheme();
   return (
     <Link href={href} passHref>
       <span // Using a span for the text itself to apply styles
         className={`${majorMonoDisplay.className} ${className} transition-opacity hover:opacity-80`} // Apply the font class and any additional classes
         style={{
           fontSize: size,
-          color: color,
+          color: theme === 'light' ? 'black' : 'white', // Adjust color based on theme
           lineHeight: 1, // Often good for single-line display fonts to prevent extra spacing
           textDecoration: 'none', // Ensuring no underline from the link by default on the span
         }}
