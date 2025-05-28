@@ -5,6 +5,7 @@ import { type Metadata } from "next";
 import { TRPCReactProvider } from "~/trpc/react";
 import { Toaster } from "~/components/ui/toaster";
 import { ThemeProvider } from "~/components/theme-provider";
+import { SessionProvider } from "next-auth/react";
 
 
 export const metadata: Metadata = {
@@ -20,15 +21,17 @@ export default function RootLayout({
     <html lang="en" className={`${GeistSans.variable}`} suppressHydrationWarning>
       <body>
         <TRPCReactProvider>
-           <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-          {children}
-          </ThemeProvider>
-          <Toaster />
+          <SessionProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+            </ThemeProvider>
+            <Toaster />
+          </SessionProvider>
         </TRPCReactProvider>
       </body>
     </html>

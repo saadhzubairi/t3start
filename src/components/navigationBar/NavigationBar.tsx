@@ -12,9 +12,10 @@ import {
     navigationMenuTriggerStyle,
 } from "~/components/ui/navigation-menu"
 import { buttonVariants } from "../ui/button"
-import { FaArrowAltCircleRight, } from "react-icons/fa"
+import { FaArrowAltCircleRight, FaSearch, } from "react-icons/fa"
 import { api } from "~/trpc/server";
 import AvatarMenu from "./AvatarMenu";
+import { SearchBar } from "./SearchBar";
 
 
 const components: { title: string; href: string; description: string }[] = [
@@ -88,6 +89,8 @@ export async function NavigationBar() {
         void api.post.getLatest.prefetch();
     }
 
+
+
     return (
         <NavigationMenu>
             <NavigationMenuList>
@@ -124,6 +127,18 @@ export async function NavigationBar() {
                         </ul>
                     </NavigationMenuContent>
                 </NavigationMenuItem> */}
+                <div className="p-4 max-w-md mx-auto">
+                    <SearchBar
+                        /* value={'searchValue'} */
+                        /* onChange={() => { console.log('Search input changed'); }} // Handle search input change)} */
+                    // You can pass any standard HTML input attributes here
+                    // id="main-search"
+                    // name="search"
+                    // className="custom-search-style"
+                    />
+                    {/* Optionally display the current search value */}
+                    {/* {searchValue && <p className="mt-2 text-sm">Searching for: {searchValue}</p>} */}
+                </div>
                 <NavigationMenuItem>
                     <NavigationMenuTrigger
                         className={cn(
@@ -162,7 +177,7 @@ export async function NavigationBar() {
                             <AvatarMenu avatarUrl={session.user.image?.toString() ?? ""} />
                             :
                             <Link
-                                className={cn(buttonVariants({ variant: "outline" }),"rounded-full")}
+                                className={cn(buttonVariants({ variant: "outline" }), "rounded-full")}
                                 href={"/login"} >
                                 Login <FaArrowAltCircleRight />
                             </Link>

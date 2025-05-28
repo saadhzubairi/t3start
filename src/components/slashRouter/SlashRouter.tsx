@@ -13,7 +13,7 @@ const SlashRouter = ({ session }: { session: Session | null  }) => {
         const checkSession = async () => {
             await new Promise(resolve => setTimeout(resolve, 500));
             if (session?.user) {
-                router.push('/play/dashboard');
+                router.push('/feed');
             } else {
                 router.push('/welcome');
             }

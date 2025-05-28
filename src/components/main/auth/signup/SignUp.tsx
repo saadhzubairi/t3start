@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 'use client'
 
-import React, { useEffect } from 'react';
-import "../authStyle.css"; // You might want a separate CSS for signup, or a shared one.
+import React, { useEffect, useState } from 'react'; // Import useState
+import "../authStyle.css"; // Ensure styles here don't override dark mode colors for backgrounds/text
 import Image from 'next/image';
 import { FaDiscord, FaGoogle } from "react-icons/fa";
 import { Input } from '~/components/ui/input';
@@ -18,13 +20,15 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage, // Import FormMessage for error display
+  FormMessage,
 } from "~/components/ui/form";
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useToast } from '~/hooks/use-toast';
 import { ToastAction } from "~/components/ui/toast";
 import ViewfinderLogo from '~/components/misc/Logo';
 import { ModeToggle } from '~/components/navigationBar/DarkModeToggle';
+import { signIn } from 'next-auth/react'; // Import signIn for OAuth providers
+import Link from 'next/link'; // Import Link
 
 const formSchema = z.object({
   email: z
@@ -33,14 +37,14 @@ const formSchema = z.object({
     .email({ message: "This is not a valid email." }),
   password: z
     .string()
-    .min(8, { message: "Password must be at least 8 characters." }) // Added min length
-    .max(50, { message: "Password cannot exceed 50 characters." }), // Added max length
+    .min(8, { message: "Password must be at least 8 characters." })
+    .max(50, { message: "Password cannot exceed 50 characters." }),
   confirmPassword: z
     .string()
     .min(1, { message: "Please confirm your password." }),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords don't match.",
-  path: ["confirmPassword"], // Path to the field that will show the error
+  path: ["confirmPassword"],
 });
 
 
@@ -57,51 +61,72 @@ const SignupPage = () => {
   const { toast } = useToast();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const error = searchParams.get('error');
+  const error = searchParams.get('error'); // Error from NextAuth.js redirect (e.g., if social signup fails)
 
+  const [isLoading, setIsLoading] = useState(false); // State for loading indicator on form submission
+
+  // Effect to display toast when an error param is present (e.g., from NextAuth.js OAuth)
   useEffect(() => {
     if (error) {
+      // You can refine this to handle specific NextAuth.js errors if needed
+      // For now, a generic destructive toast for any URL error param
       toast({
         variant: "destructive",
-        title: "Uh oh! Something went wrong.",
-        description: "There was a problem with your signup. Please try again.",
+        title: "Sign-up Error",
+        description: "An issue occurred during sign-up. Please try again or use another method.",
         action: <ToastAction altText="Try again">Try again</ToastAction>,
       });
+      // Optionally clear the error from the URL to prevent re-toasting on re-renders
+      const newSearchParams = new URLSearchParams(searchParams.toString());
+      newSearchParams.delete('error');
+      router.replace(`?${newSearchParams.toString()}`, { scroll: false });
     }
-  }, [error, toast]);
+  }, [error, toast, router, searchParams]);
 
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("Signup values:", values);
-    // Here you would typically call your backend API to register the user.
-    // Example:
-    // const response = await fetch('/api/auth/register', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({ email: values.email, password: values.password }),
-    // });
-    // if (response.ok) {
-    //   toast({
-    //     title: "Account created!",
-    //     description: "You can now log in with your new account.",
-    //   });
-    //   router.push('/login'); // Redirect to login page after successful signup
-    // } else {
-    //   toast({
-    //     variant: "destructive",
-    //     title: "Signup failed.",
-    //     description: "Please check your details and try again.",
-    //   });
-    // }
-    toast({
-      title: "Signup Attempt",
-      description: `Email: ${values.email}, Password: ${values.password}`,
-    });
-    // Simulate a successful signup and redirect
-    setTimeout(() => {
-      router.push('/login');
-    }, 1500);
+    setIsLoading(true); // Set loading state to true
+    try {
+      const response = await fetch('/api/auth/supabase-signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: values.email, password: values.password }), // Only send email and password to backend
+      });
 
+      const data = await response.json(); // Parse the response
+
+      if (response.ok) {
+        toast({
+          title: "Sign up successful!",
+          description: data.requiresEmailVerification
+            ? "Please check your email to verify your account. You can log in after verification."
+            : "You have successfully signed up. You can now log in.",
+          action: <ToastAction altText="Go to login" onClick={() => router.push('/login')}>Go to Login</ToastAction>, // Action button to go to login
+        });
+        // Redirect to login page after successful signup (and possibly verification message)
+        router.push('/login');
+      } else {
+        // Handle specific errors from your API route (e.g., duplicate email)
+        toast({
+          title: "Sign up failed.",
+          description: data.error || "An unexpected error occurred. Please try again.",
+          variant: "destructive",
+          action: <ToastAction altText="Try again">Try again</ToastAction>,
+        });
+      }
+    } catch (apiError) {
+      console.error('Client-side network/API call error:', apiError);
+      toast({
+        title: "Sign up failed.",
+        description: "Could not connect to the server. Please check your internet connection.",
+        variant: "destructive",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
+    } finally {
+      setIsLoading(false); // Reset loading state
+    }
   }
 
   return (
@@ -136,7 +161,7 @@ const SignupPage = () => {
                             className='bg-neutral-100 dark:bg-neutral-700 shadow-md'
                           />
                         </FormControl>
-                        <FormMessage /> {/* Displays validation errors */}
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
@@ -166,34 +191,41 @@ const SignupPage = () => {
                       </FormItem>
                     )}
                   />
+                  <div className="gap-2 flex items-center justify-start">
+                    <Checkbox id="terms" />
+                    <Label htmlFor="terms" className="text-neutral-700 dark:text-neutral-300 font-medium">
+                      I agree to the terms and conditions
+                    </Label>
+                  </div>
                   <div className="">
-                    <div className="flex justify-between items-center w-full gap-4">
-                      <Button className='px-4 py-2 w-28' type="submit">Sign Up</Button>
-                      <Button
-                        className='text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-xs'
-                        variant={'link'}
-                        onClick={() => router.push('/login')} // Link back to login
-                      >
-                        Already have an account?
-                      </Button>
-                    </div>
+                    <Button className='px-4 py-2 w-full' type="submit" disabled={isLoading}>
+                      {isLoading ? 'Signing up...' : 'Sign Up'}
+                    </Button>
                   </div>
                 </form>
               </Form>
               <Separator className='my-4' />
               <div className="w-full">
                 <div className="flex justify-between items-center w-full gap-2 flex-col">
+                  {/* Changed the Link to a Button for consistency with other social sign-up buttons */}
+                  <Button
+                    className='text-blue-600 dark:text-blue-400 border-blue-600 dark:border-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-xs w-full'
+                    variant={'outline'}
+                    onClick={() => router.push('/login')}
+                  >
+                    Go to Login
+                  </Button>
                   <Button
                     className='text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 border-indigo-600 dark:border-indigo-400 text-xs w-full flex items-center justify-center gap-2'
                     variant={'outline'}
-                    onClick={() => console.log("Sign up with Discord")} // Implement Discord signup
+                    onClick={() => signIn('discord')} // Actual call to NextAuth.js
                   >
                     <FaDiscord className="w-4 h-4" /> Sign up using Discord
                   </Button>
                   <Button
                     className='text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 border-red-600 dark:border-red-400 text-xs w-full flex items-center justify-center gap-2'
                     variant={'outline'}
-                    onClick={() => console.log("Sign up with Google")} // Implement Google signup
+                    onClick={() => signIn('google')} // Actual call to NextAuth.js
                   >
                     <FaGoogle className="w-4 h-4" /> Sign up using Google
                   </Button>

@@ -22,14 +22,13 @@ const AvatarMenu = ({ avatarUrl }: AvatarMenuProps) => {
     const router = useRouter();
 
     return (
-        <Menubar>
+        <Menubar className="bg-transparent border-none shadow-none">
             <MenubarMenu >
-                <MenubarTrigger className="flex gap-2 cursor-pointer">
+                <MenubarTrigger className="flex gap-2 cursor-pointer ">
                     <Avatar className='h-7 w-7'>
                         <AvatarImage className="flex justify-center items-center h-7 w-7 rounded-full" src={avatarUrl} />
                         <AvatarFallback>CN</AvatarFallback>
                     </Avatar>
-                    My profile
                 </MenubarTrigger>
                 <MenubarContent>
                     <MenubarItem>

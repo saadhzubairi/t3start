@@ -1,11 +1,11 @@
 'use client'
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'; // Import useState
 import "../authStyle.css"
 import Image from 'next/image'
 import { FaDiscord, FaGoogle } from "react-icons/fa";
 import { Input } from '~/components/ui/input'
-import { Button, buttonVariants } from '~/components/ui/button'
+import { Button, buttonVariants } from '~/components/ui/button' // Removed buttonVariants as not directly used in the button component
 import { Separator } from '~/components/ui/separator'
 import { Checkbox } from '~/components/ui/checkbox'
 import { Label } from '~/components/ui/label'
@@ -18,17 +18,18 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage, // Import FormMessage for error display
 } from "~/components/ui/form"
 import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useToast } from '~/hooks/use-toast';
 import { ToastAction } from "~/components/ui/toast"
-import { Session } from 'next-auth';
+import { Session } from 'next-auth'; // Assuming Session is passed as prop
 import ViewfinderLogo from '~/components/misc/Logo';
-import { useTheme } from 'next-themes';
 import { ModeToggle } from '~/components/navigationBar/DarkModeToggle';
 import Link from 'next/link';
 import { cn } from '~/lib/utils';
+// import { cn } from '~/lib/utils'; // Only needed if you use cn function here
 
 const formSchema = z.object({
   email: z
@@ -46,7 +47,8 @@ const LoginPage = ({ session }: { session: Session | null }) => {
   const error = searchParams.get('error');
   console.log('LoginPage rendered. Error param:', error);
 
-  const { toast } = useToast(); // Ensure useToast is called at the top level
+  const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false); // State for loading indicator
 
   const getErrorMessage = (errorCode: string | null) => {
     switch (errorCode) {
@@ -62,10 +64,10 @@ const LoginPage = ({ session }: { session: Session | null }) => {
           description: "Failed to send verification email. Please try again.",
           variant: "destructive" as const,
         };
-      case 'CredentialsSignin':
+      case 'CredentialsSignin': // This will be the error for failed email/password login
         return {
-          title: "Invalid Credentials",
-          description: "Invalid username or password. Please check your credentials.",
+          title: "Login Failed",
+          description: "Invalid email or password. Please check your credentials.",
           variant: "destructive" as const,
         };
       case 'OAuthCallbackError':
@@ -79,6 +81,12 @@ const LoginPage = ({ session }: { session: Session | null }) => {
           title: "Server Configuration Error",
           description: "A server configuration error occurred. Please try again later or contact support.",
           variant: "destructive" as const,
+        };
+      case 'verifyEmail': // Message from successful Supabase signup requiring verification
+        return {
+            title: "Account Created!",
+            description: "Please check your email to verify your account before logging in.",
+            variant: "default" as const, // Or a different variant like "success" if you have one
         };
       default:
         return {
@@ -97,9 +105,34 @@ const LoginPage = ({ session }: { session: Session | null }) => {
     },
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
-    // You might want to call signIn('credentials', { email: values.email, password: values.password }); here
+  // NEW: onSubmit function for credentials login
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsLoading(true);
+    const result = await signIn('credentials', {
+      email: values.email,
+      password: values.password,
+      redirect: false, // Prevent NextAuth.js from redirecting on failure, let us handle it
+    });
+
+    setIsLoading(false);
+
+    if (result?.error) {
+      // result.error will contain the error string from NextAuth.js
+      // e.g., "CredentialsSignin"
+      const toastOptions = getErrorMessage(result.error);
+      toast(toastOptions);
+      // Optionally, if you want to clear the URL error param here too
+      router.replace('/login', { scroll: false });
+    } else if (result?.ok) {
+      // Login successful, redirect to dashboard
+      toast({
+        title: "Login Successful!",
+        description: "Welcome back!",
+        // If you want a ToastAction that takes them to the dashboard, use this:
+        // action: <ToastAction altText="Go to dashboard" onClick={() => router.push('/play/dashboard')}>Go to Dashboard</ToastAction>,
+      });
+      router.push('/play/dashboard');
+    }
   }
 
   const router = useRouter();
@@ -107,22 +140,32 @@ const LoginPage = ({ session }: { session: Session | null }) => {
   // Redirect if session exists
   useEffect(() => {
     if (session?.user) {
-      router.push('/play/dashboard');
+      router.push('/feed');
     }
   }, [router, session]);
 
-  // NEW useEffect for displaying toast on initial load
+  // Effect for displaying toast on initial load (for OAuth or other direct errors)
   useEffect(() => {
+    // Check for `error` param from OAuth or other NextAuth.js redirects
     if (error) {
-      // Add a small, controlled delay
-      const timer = setTimeout(() => {
-        const toastOptions = getErrorMessage(error);
-        toast(toastOptions);
-      }, 50); // Try 50ms or 100ms
-      return () => clearTimeout(timer);
+      const toastOptions = getErrorMessage(error);
+      toast(toastOptions);
+      // Optionally clear the error from the URL to prevent re-toasting on re-renders
+      const newSearchParams = new URLSearchParams(searchParams.toString());
+      newSearchParams.delete('error');
+      router.replace(`?${newSearchParams.toString()}`, { scroll: false });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [error, toast]); // Depend on 'error' and 'toast'
+    // Also check for `message` param (e.g., from Supabase signup)
+    const message = searchParams.get('message');
+    if (message) {
+      const toastOptions = getErrorMessage(message);
+      toast(toastOptions);
+      // Clear the message from the URL
+      const newSearchParams = new URLSearchParams(searchParams.toString());
+      newSearchParams.delete('message');
+      router.replace(`?${newSearchParams.toString()}`, { scroll: false });
+    }
+  }, [error, searchParams, toast, router]); // Added all dependencies
 
   return (
     <main className="p-10 flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-stone-50 to-stone-100 dark:from-neutral-900 dark:to-neutral-950">
@@ -158,6 +201,7 @@ const LoginPage = ({ session }: { session: Session | null }) => {
                             className='bg-neutral-100 dark:bg-neutral-700 shadow-md'
                           />
                         </FormControl>
+                        <FormMessage /> {/* Added FormMessage for email */}
                       </FormItem>
                     )}
                   />
@@ -170,6 +214,7 @@ const LoginPage = ({ session }: { session: Session | null }) => {
                         <FormControl>
                           <Input type="password" placeholder="xxxx" {...field} className='bg-neutral-100 dark:bg-neutral-700 shadow-md' />
                         </FormControl>
+                        <FormMessage /> {/* Added FormMessage for password */}
                       </FormItem>
                     )}
                   />
@@ -181,7 +226,9 @@ const LoginPage = ({ session }: { session: Session | null }) => {
                   </div>
                   <div className="">
                     <div className="flex justify-between items-center w-full gap-4">
-                      <Button className='px-4 py-2 w-28' type="submit">Login</Button>
+                      <Button className='px-4 py-2 w-28' type="submit" disabled={isLoading}>
+                        {isLoading ? 'Logging in...' : 'Login'}
+                      </Button>
                       <Button className='text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-xs' variant={'link'}>Having trouble?</Button>
                     </div>
                   </div>
@@ -190,6 +237,7 @@ const LoginPage = ({ session }: { session: Session | null }) => {
               <Separator className='my-4' />
               <div className="w-full">
                 <div className="flex justify-between items-center w-full gap-2 flex-col">
+                  {/* Changed to Link for proper navigation */}
                   <Link href="/signup" className={cn(buttonVariants({ variant: "outline" }), 'text-blue-600 dark:text-blue-400 border-blue-600 dark:border-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-xs w-full')}>Sign up</Link>
                   <Button
                     className='text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 border-indigo-600 dark:border-indigo-400 text-xs w-full flex items-center justify-center gap-2'
@@ -211,7 +259,7 @@ const LoginPage = ({ session }: { session: Session | null }) => {
           </div>
         </div>
         <div className="LoginPaneRight h-full w-full flex justify-center items-center relative">
-          <Image src={'/login.jpg'} alt={''} fill style={{ objectFit: 'cover' }} className="rounded-r-lg" />
+          <Image src={'/login.jpg'} alt={'Login Illustration'} fill style={{ objectFit: 'cover' }} className="rounded-r-lg" />
           <div
             className="absolute top-2 right-2">
             <ModeToggle />
