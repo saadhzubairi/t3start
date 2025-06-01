@@ -9,7 +9,8 @@ const page = async () => {
 
   return (
     <div>
-      <Dashboard session={session} />
+      {/* <Dashboard session={session} /> */}
+      Dashboard
     </div>
   )
 }
