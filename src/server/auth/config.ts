@@ -142,10 +142,9 @@ export const authConfig = {
       return `/`;
     },
     async signIn({ user, account, profile }) {
-      /* console.log("==================================", user, account, profile); */
       if (account?.provider === "google" || account?.provider === "discord") {
-        if (profile?.email_verified === null) {
-          await db.user.update({
+        if (profile?.email_verified === null || profile?.email_verified === undefined) {
+          const lala = await db.user.update({
             where: { id: user.id },
             data: { emailVerified: new Date() },
           });
@@ -154,7 +153,7 @@ export const authConfig = {
       return true;
     },
   },
-  pages: {
+pages: {
     signIn: "/login", // Custom login page
     error: "/login",
   },
