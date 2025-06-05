@@ -46,14 +46,14 @@ const Landing = () => {
 
         {/* Hero Content */}
         <ScrollAnimated>
-          <div className='relative z-10 flex flex-col items-center justify-center text-white p-6'>
+          <div className='delay- relative z-10 flex flex-col items-center justify-center text-white p-6'>
             <h1 className='text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold max-w-3xl mb-6 shadow-sm'>
               Where Inspiration Takes Form.
             </h1>
             <p className='text-lg sm:text-xl text-zinc-300 max-w-xl mb-8'>
               Exploring the intersection of design, innovation, and the built environment.
             </p>
-            <Link href="#featured-articles" passHref legacyBehavior>
+            <Link href="#featured-articles" passHref >
               <Button variant="outline" className='bg-transparent border-custom-lightAccent text-custom-lightAccent hover:bg-custom-lightAccent hover:text-custom-dark transition-colors duration-300 text-lg px-8 py-3'>
                 Explore Articles <FaArrowRight className='ml-2.5 w-5 h-5' />
               </Button>

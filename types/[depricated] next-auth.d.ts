@@ -1,4 +1,4 @@
-// next-auth.d.ts or in a relevant .ts file included in your tsconfig
+/* // next-auth.d.ts or in a relevant .ts file included in your tsconfig
 import { type DefaultSession } from "next-auth";
 import { type ROLE } from "@prisma/client"; // Import your Prisma enum
 
@@ -26,4 +26,4 @@ declare module "next-auth" {
     createdAt: Date;
     updatedAt: Date;
   }
-}
+} */

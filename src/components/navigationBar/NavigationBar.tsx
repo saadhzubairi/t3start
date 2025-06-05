@@ -135,12 +135,9 @@ export async function NavigationBar() {
                         session ?
                             <AvatarMenu avatarUrl={session.user.image?.toString() ?? ""} />
                             :
-                            <Button asChild>
-                                <Link
-                                    href="/login"
-                                    className={cn(buttonVariants({ variant: "outline" }), "rounded-full")}
-                                >
-                                    Login <FaArrowAltCircleRight />
+                            <Button asChild className="rounded-full">
+                                <Link href="/login" >
+                                    Login <div className="p-1 hover:bg-gray-50 hover:rounded-full scale-110 hover:scale-100 transition-all duration-300"><FaArrowAltCircleRight /></div>
                                 </Link>
                             </Button>
                     }

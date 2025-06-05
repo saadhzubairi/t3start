@@ -29,6 +29,8 @@ import { ModeToggle } from '~/components/navigationBar/DarkModeToggle';
 import { signIn } from 'next-auth/react'; // Import signIn for OAuth providers
 import Link from 'next/link'; // Import Link
 import SocialMediaLogins from '../socialMediaLogins';
+import ScrollAnimated from '~/components/misc/ScrollAnimated';
+import FadeIn from '~/components/misc/FadeIn';
 
 const formSchema = z.object({
   email: z
@@ -111,7 +113,7 @@ const SignupPage = () => {
         // Handle specific errors from your API route (e.g., duplicate email)
         toast({
           title: "Sign up failed.",
-          description: data.error || "An unexpected error occurred. Please try again.",
+          description: "An unexpected error occurred. Please try again.",
           variant: "destructive",
           action: <ToastAction altText="Try again">Try again</ToastAction>,
         });
@@ -130,96 +132,112 @@ const SignupPage = () => {
   }
 
   return (
-    <main className="p-10 flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-stone-50 to-stone-100 dark:from-neutral-900 dark:to-neutral-950">
-      <div className="LoginPane drop-shadow-2xl rounded-lg bg-white dark:bg-neutral-800">
-        <div className="LoginPaneLeft h-full w-full flex justify-center items-center">
-          <div className="flex justify-center items-center flex-col p-8 md:p-12">
+    <main className="p-10 flex h-[100vh] lg:flex-col md:flex-row items-center justify-center bg-gradient-to-b from-stone-50 to-stone-100 dark:from-neutral-900 dark:to-neutral-950">
+      <FadeIn>
+        <div className="LoginPane h-[80vh] drop-shadow-2xl rounded-lg bg-white dark:bg-neutral-800">
+          <div className="LoginPaneLeft h-full w-full flex justify-center items-center">
+            <div className="flex justify-center items-center flex-col p-8 md:p-12">
 
-            <div className='font-thin text-6xl mb-12'>
-              <ViewfinderLogo size="2.5rem" />
-            </div>
-            <div className="flex justify-center items-start flex-col gap-4 w-full max-w-sm">
-              <div className="flex flex-col">
-                <div className="">
-                  <div className="text-lg font-bold text-neutral-900 dark:text-neutral-100">Sign Up</div>
+              <div className='font-thin text-6xl mb-12'>
+                <ScrollAnimated>
+                  <ViewfinderLogo size="2.5rem" />
+                </ScrollAnimated>
+              </div>
+              <div className="flex justify-center delay dela items-start flex-col gap-4 w-full max-w-sm">
+                <ScrollAnimated delay={"100"}>
+                  <div className="flex flex-col">
+                    <div className="">
+                      <div className="text-lg font-bold text-neutral-900 dark:text-neutral-100">Sign Up</div>
+                    </div>
+                    <div className="flex justify-center items-center flex-col text-sm text-neutral-500 dark:text-neutral-400 font-medium">Create your new account</div>
+                  </div>
+                </ScrollAnimated>
+                <Form {...form}>
+                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 w-full">
+                    <ScrollAnimated delay={"200"}>
+                      <FormField
+                        control={form.control}
+                        name="email"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-neutral-700 dark:text-neutral-300">Email</FormLabel>
+                            <FormControl>
+                              <Input
+                                type="email"
+                                placeholder="abc@example.com"
+                                {...field}
+                                className='bg-neutral-100 dark:bg-neutral-700 shadow-md'
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </ScrollAnimated>
+                    <ScrollAnimated delay={"300"}>
+                      <FormField
+                        control={form.control}
+                        name="password"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-neutral-700 dark:text-neutral-300">Password</FormLabel>
+                            <FormControl>
+                              <Input type="password" placeholder="" {...field} className='bg-neutral-100 dark:bg-neutral-700 shadow-md' />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </ScrollAnimated>
+                    {
+                      false && (<FormField
+                        control={form.control}
+                        name="confirmPassword"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-neutral-700 dark:text-neutral-300">Confirm Password</FormLabel>
+                            <FormControl>
+                              <Input type="password" placeholder="" {...field} className='bg-neutral-100 dark:bg-neutral-700 shadow-md' />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />)
+                    }
+                    <ScrollAnimated delay={"300"}>
+                      <div className="flex flex-col gap-4">
+                        <div className="gap-2 flex items-center justify-start">
+                          <Checkbox id="terms" />
+                          <Label htmlFor="terms" className="text-neutral-700 dark:text-neutral-300 font-medium">
+                            I agree to the terms and conditions
+                          </Label>
+                        </div>
+                        <div className="">
+                          <Button className='px-4 py-2 w-full' type="submit" disabled={isLoading}>
+                            {isLoading ? 'Signing up...' : 'Sign Up'}
+                          </Button>
+                        </div>
+                      </div>
+                    </ScrollAnimated>
+                  </form>
+                </Form>
+
+                <div className="w-full">
+                  <ScrollAnimated delay={"300"}>
+                    <SocialMediaLogins />
+                  </ScrollAnimated>
                 </div>
-                <div className="flex justify-center items-center flex-col text-sm text-neutral-500 dark:text-neutral-400 font-medium">Create your new account</div>
-              </div>
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 w-full">
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-neutral-700 dark:text-neutral-300">Email</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="email"
-                            placeholder="abc@example.com"
-                            {...field}
-                            className='bg-neutral-100 dark:bg-neutral-700 shadow-md'
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="password"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-neutral-700 dark:text-neutral-300">Password</FormLabel>
-                        <FormControl>
-                          <Input type="password" placeholder="xxxx" {...field} className='bg-neutral-100 dark:bg-neutral-700 shadow-md' />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  {
-                    false && (<FormField
-                    control={form.control}
-                    name="confirmPassword"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-neutral-700 dark:text-neutral-300">Confirm Password</FormLabel>
-                        <FormControl>
-                          <Input type="password" placeholder="xxxx" {...field} className='bg-neutral-100 dark:bg-neutral-700 shadow-md' />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />)
-                  }
-                  <div className="gap-2 flex items-center justify-start">
-                    <Checkbox id="terms" />
-                    <Label htmlFor="terms" className="text-neutral-700 dark:text-neutral-300 font-medium">
-                      I agree to the terms and conditions
-                    </Label>
-                  </div>
-                  <div className="">
-                    <Button className='px-4 py-2 w-full' type="submit" disabled={isLoading}>
-                      {isLoading ? 'Signing up...' : 'Sign Up'}
-                    </Button>
-                  </div>
-                </form>
-              </Form>
-              
-              <div className="w-full">
-                <SocialMediaLogins />
               </div>
             </div>
           </div>
-        </div>
-        <div className="LoginPaneRight h-full w-full flex justify-center items-center relative">
-          <Image src={'/login.webp'} alt={'Sign Up'} fill style={{ objectFit: 'cover' }} className="rounded-r-lg" />
-          <div className="absolute top-2 right-2">
-            <ModeToggle />
+          <div className="LoginPaneRight h-full w-full flex justify-center items-center relative">
+            <Image src={'/login.webp'} alt={'Sign Up'} fill style={{ objectFit: 'cover' }} className="rounded-r-lg" />
+            <div className="absolute top-2 right-2">
+              <ModeToggle />
+            </div>
           </div>
         </div>
-      </div>
+      </FadeIn>
     </main>
   );
 }

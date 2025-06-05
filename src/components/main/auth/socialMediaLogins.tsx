@@ -22,7 +22,7 @@ const SocialMediaLogins = () => {
                 <div className="flex justify-between items-center w-full gap-2 flex-col">
                     {/* Changed the Link to a Button for consistency with other social sign-up buttons */}
                     <Button asChild variant={'outline'} className="text-blue-600 dark:text-blue-400 border-blue-600 dark:border-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-xs w-full">
-                        <Link href={isloginpage ? "/signup" : "/login"} legacyBehavior>{isloginpage ? "Sign up" : "Already have an account?"}</Link>
+                        <Link href={isloginpage ? "/signup" : "/login"}>{isloginpage ? "Sign up" : "Already have an account?"}</Link>
                     </Button>
                     <Button
                         className='text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 border-indigo-600 dark:border-indigo-400 text-xs w-full flex items-center justify-center gap-2'

@@ -6,7 +6,7 @@ import React, { useEffect, useRef, useState, ElementType, HTMLAttributes } from 
 
 interface ScrollAnimatedProps extends HTMLAttributes<HTMLElement> {
   children: React.ReactNode;
-  delay?: string | null;
+  delay?: "0" | "75" | "100" | "200" | "300" | "500" | "700" | "1000" | null;
   animationClass?: string;
   threshold?: number;
   href?: string; // Optional href for anchor tags

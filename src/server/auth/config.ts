@@ -8,14 +8,18 @@ import CredentialsProvider from "next-auth/providers/credentials"; // Import Cre
 import { supabase } from "~/lib/supabase"; // Import GoogleProvider
 
 import { db } from "~/server/db";
+import { ROLE } from "@prisma/client";
 
 declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
-      id: string;
-      // ...other properties
-      // role: UserRole;
-    } & DefaultSession["user"];
+      id: string; // Already here, good
+      role: ROLE;
+      active: boolean;
+      createdAt: Date; // Prisma schema has DateTime, which is Date in JS/TS
+      updatedAt: Date; // Prisma schema has DateTime
+      emailVerified?: Date | null; // Add if you need it on the session user
+    } & DefaultSession["user"]; // DefaultSession["user"] provides name, email, image
   }
 }
 
@@ -36,7 +40,7 @@ export const authConfig = {
         email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
       },
-      /* async authorize(credentials) {
+      async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
           return null; // Return null if credentials are missing
         }
@@ -79,7 +83,7 @@ export const authConfig = {
                 email: data.user.email!,
                 name: data.user.email?.split('@')[0], // Simple default name
                 emailVerified: data.user.email_confirmed_at ? new Date(data.user.email_confirmed_at) : null,
-                image: data.user.user_metadata?.avatar_url || null, // If Supabase stores profile image
+                image: data.user.user_metadata?.avatar_url ?? null, // If Supabase stores profile image
               },
             });
             // Also create an Account entry for this credentials login if you want to track it like an OAuth account
@@ -104,12 +108,12 @@ export const authConfig = {
         }
 
         return null; // Return null if authentication fails
-      }, */
+      },
     }),
   ],
   adapter: PrismaAdapter(db),
   callbacks: {
-    jwt({ token, user }) {
+    /* jwt({ token, user }) {
       if (user) {
         token.id = user.id;
         token.role = user.role;
@@ -118,7 +122,7 @@ export const authConfig = {
         token.updatedAt = user.updatedAt;
       }
       return token;
-    },
+    }, */
     /* session({ session, token }) {
       session.user.role = token.role;
       return session;
@@ -131,13 +135,16 @@ export const authConfig = {
       },
     }),
     redirect({ url, baseUrl }) {
-      return `${baseUrl}/userInfo`;
+      const targetUrl = new URL(url, baseUrl);
+      if (targetUrl.pathname === '/login' && targetUrl.searchParams.has('error')) {
+        return url;
+      }
+      return `/`;
     },
     async signIn({ user, account, profile }) {
-      console.log("==================================", user, account, profile);
+      /* console.log("==================================", user, account, profile); */
       if (account?.provider === "google" || account?.provider === "discord") {
-        // Check if email_verified is true in profile
-        if (profile?.email_verified) {
+        if (profile?.email_verified === null) {
           await db.user.update({
             where: { id: user.id },
             data: { emailVerified: new Date() },
@@ -149,6 +156,6 @@ export const authConfig = {
   },
   pages: {
     signIn: "/login", // Custom login page
-    error: "/login", // Custom error page
+    error: "/login",
   },
 } satisfies NextAuthConfig;

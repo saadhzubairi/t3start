@@ -30,6 +30,8 @@ import { ModeToggle } from '~/components/navigationBar/DarkModeToggle';
 import Link from 'next/link';
 import { cn } from '~/lib/utils';
 import SocialMediaLogins from '../socialMediaLogins';
+import ScrollAnimated from '~/components/misc/ScrollAnimated';
+import FadeIn from '~/components/misc/FadeIn';
 // import { cn } from '~/lib/utils'; // Only needed if you use cn function here
 
 const formSchema = z.object({
@@ -169,86 +171,106 @@ const LoginPage = ({ session }: { session: Session | null }) => {
   }, [error, searchParams, toast, router]); // Added all dependencies
 
   return (
-    <main className="p-10 flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-stone-50 to-stone-100 dark:from-neutral-900 dark:to-neutral-950">
-      <div className="LoginPane drop-shadow-2xl rounded-lg bg-white dark:bg-neutral-800">
-        <div className="LoginPaneLeft h-full w-full flex justify-center items-center">
-          <div className="flex justify-center items-center flex-col p-8 md:p-12">
+    <main className="p-10 flex h-[100vh] lg:flex-col md:flex-row items-center justify-center bg-gradient-to-b from-stone-50 to-stone-100 dark:from-neutral-900 dark:to-neutral-950">
+      <FadeIn duration={300}>
+        <div className="LoginPane h-[80vh] drop-shadow-2xl rounded-lg bg-white dark:bg-neutral-800">
+          <div className="LoginPaneLeft h-full w-full flex justify-center items-center">
+            <div className="flex justify-center items-center flex-col p-8 md:p-12">
 
-            <div className='font-thin text-6xl mb-12'>
-              <ViewfinderLogo
-                size="2.5rem"
-              />
-            </div>
-            <div className="flex justify-center items-start flex-col gap-4 w-full max-w-sm">
-              <div className="flex flex-col">
-                <div className="">
-                  <div className="text-lg font-bold text-neutral-900 dark:text-neutral-100">Login</div>
-                </div>
-                <div className="flex justify-center items-center flex-col text-sm text-neutral-500 dark:text-neutral-400 font-medium">Enter your credentials to login</div>
+              <div className='font-thin text-6xl mb-12'>
+                <ScrollAnimated>
+                  <ViewfinderLogo
+                    size="2.5rem"
+                  />
+                </ScrollAnimated>
               </div>
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 w-full">
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-neutral-700 dark:text-neutral-300">Email</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="email"
-                            placeholder="abc@example.com"
-                            {...field}
-                            className='bg-neutral-100 dark:bg-neutral-700 shadow-md'
-                          />
-                        </FormControl>
-                        <FormMessage /> {/* Added FormMessage for email */}
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="password"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-neutral-700 dark:text-neutral-300">Password</FormLabel>
-                        <FormControl>
-                          <Input type="password" placeholder="xxxx" {...field} className='bg-neutral-100 dark:bg-neutral-700 shadow-md' />
-                        </FormControl>
-                        <FormMessage /> {/* Added FormMessage for password */}
-                      </FormItem>
-                    )}
-                  />
-                  <div className="gap-2 flex items-center justify-start">
-                    <Checkbox id="doNotForget" />
-                    <Label htmlFor="doNotForget" className="text-neutral-700 dark:text-neutral-300 font-medium">
-                      Keep me logged in
-                    </Label>
-                  </div>
+              <div className="flex justify-center items-start flex-col gap-4 w-full max-w-sm">
+                <div className="flex flex-col">
                   <div className="">
-                    <div className="flex justify-between items-center w-full gap-4">
-                      <Button className='px-4 py-2 w-28' type="submit" disabled={isLoading}>
-                        {isLoading ? 'Logging in...' : 'Login'}
-                      </Button>
-                      <Button className='text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-xs' variant={'link'}>Having trouble?</Button>
-                    </div>
+                    <ScrollAnimated delay={"75"}>
+                      <div className="text-lg font-bold text-neutral-900 dark:text-neutral-100">Login</div>
+                    </ScrollAnimated>
                   </div>
-                </form>
-              </Form>
-              <div className="w-full">
-                <SocialMediaLogins />
+                  <ScrollAnimated delay={"100"}>
+                    <div className="flex justify-center items-center flex-col text-sm text-neutral-500 dark:text-neutral-400 font-medium">Enter your credentials to login</div>
+                  </ScrollAnimated>
+                </div>
+                <Form {...form}>
+                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 w-full">
+                    <ScrollAnimated delay={"200"}>
+                      <FormField
+                        control={form.control}
+                        name="email"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-neutral-700 dark:text-neutral-300">Email</FormLabel>
+                            <FormControl>
+                              <Input
+                                type="email"
+                                placeholder="abc@example.com"
+                                {...field}
+                                className='bg-neutral-100 dark:bg-neutral-700 shadow-md'
+                              />
+                            </FormControl>
+                            <FormMessage /> {/* Added FormMessage for email */}
+                          </FormItem>
+                        )}
+                      />
+                    </ScrollAnimated>
+                    <ScrollAnimated delay={"200"}>
+                      <FormField
+                        control={form.control}
+                        name="password"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-neutral-700 dark:text-neutral-300">Password</FormLabel>
+                            <FormControl>
+                              <Input type="password" placeholder="xxxx" {...field} className='bg-neutral-100 dark:bg-neutral-700 shadow-md' />
+                            </FormControl>
+                            <FormMessage /> {/* Added FormMessage for password */}
+                          </FormItem>
+                        )}
+                      />
+                    </ScrollAnimated>
+                    <ScrollAnimated delay={"300"}>
+                      <div className="gap-2 flex items-center justify-start">
+                        <Checkbox id="doNotForget" />
+                        <Label htmlFor="doNotForget" className="text-neutral-700 dark:text-neutral-300 font-medium">
+                          Keep me logged in
+                        </Label>
+                      </div>
+                    </ScrollAnimated>
+                    <ScrollAnimated delay={"300"}>
+                      <div className="">
+                        <div className="flex justify-between items-center w-full gap-4">
+                          <Button className='px-4 py-2 w-28' type="submit" disabled={isLoading}>
+                            {isLoading ? 'Logging in...' : 'Login'}
+                          </Button>
+                          <Button className='text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-xs' variant={'link'}>Having trouble?</Button>
+                        </div>
+                      </div>
+                    </ScrollAnimated>
+                  </form>
+                </Form>
+                <div className="w-full">
+                  <ScrollAnimated delay={"300"}>
+                    <SocialMediaLogins />
+                  </ScrollAnimated>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="LoginPaneRight h-full w-full flex justify-center items-center relative">
-          <Image src={'/login.jpg'} alt={'Login Illustration'} fill style={{ objectFit: 'cover' }} className="rounded-r-lg" />
-          <div
-            className="absolute top-2 right-2">
-            <ModeToggle />
+          <div className="LoginPaneRight h-full w-full flex justify-center items-center relative">
+
+            <Image src={'/login.jpg'} alt={'Login Illustration'} fill style={{ objectFit: 'cover' }} className="rounded-r-lg" />
+
+            <div
+              className="absolute top-2 right-2">
+              <ModeToggle />
+            </div>
           </div>
         </div>
-      </div>
+      </FadeIn>
     </main>
   )
 }

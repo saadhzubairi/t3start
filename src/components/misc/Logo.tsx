@@ -43,24 +43,24 @@ const ViewfinderLogo: React.FC<LogoProps> = ({
   // with a fallback color during SSR is generally safer.
 
   return (
-    <Link
-      href={{
-        pathname: href,
-        query: { name: 'test' },
-      }}
-    >
-      <span
+    <>
+      <Link
+        href={{
+          pathname: href,
+          query: { name: 'test' },
+
+        }}
         className={`${majorMonoDisplay.className} ${className} transition-opacity hover:opacity-80`}
         style={{
           fontSize: size,
-          color: textColor, // Use the dynamically determined color
+          color: textColor, 
           lineHeight: 1,
           textDecoration: 'none',
         }}
       >
         Viewfinder
-      </span>
-    </Link>
+      </Link>
+    </>
   );
 };
 
