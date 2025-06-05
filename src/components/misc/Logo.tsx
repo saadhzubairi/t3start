@@ -43,7 +43,12 @@ const ViewfinderLogo: React.FC<LogoProps> = ({
   // with a fallback color during SSR is generally safer.
 
   return (
-    <Link href={href} passHref>
+    <Link
+      href={{
+        pathname: href,
+        query: { name: 'test' },
+      }}
+    >
       <span
         className={`${majorMonoDisplay.className} ${className} transition-opacity hover:opacity-80`}
         style={{

@@ -11,7 +11,7 @@ import {
     NavigationMenuTrigger,
     navigationMenuTriggerStyle,
 } from "~/components/ui/navigation-menu"
-import { buttonVariants } from "../ui/button"
+import { Button, buttonVariants } from "../ui/button"
 import { FaArrowAltCircleRight, FaSearch, } from "react-icons/fa"
 import { api } from "~/trpc/server";
 import AvatarMenu from "./AvatarMenu";
@@ -59,23 +59,23 @@ interface NavLinkItemProps {
 const NavLinkItem: React.FC<NavLinkItemProps> = ({ href, children }) => {
     return (
         <NavigationMenuItem>
-            <Link href={href} legacyBehavior passHref>
-                <NavigationMenuLink
-                    className={cn(
-                        navigationMenuTriggerStyle(),                // 1. Apply base Shadcn styles
-                        "bg-transparent",                            // 2. Override default background to transparent
-                        "text-neutral-900 dark:text-neutral-100",    // 3. Set text color: dark text for light mode, light text for dark mode
-                        "hover:bg-neutral-200 dark:hover:bg-neutral-700/60", // 4. Hover background: light grey for light mode, dark grey for dark mode
-                        "hover:text-neutral-900 dark:hover:text-neutral-100", // 5. Ensure text color matches mode on hover
-                        "focus:bg-neutral-200 dark:focus:bg-neutral-700/60", // 6. Consistent focus style for both modes
-                        "focus:text-neutral-900 dark:focus:text-neutral-100", //
-                        "data-[active]:bg-neutral-300 dark:data-[active]:bg-neutral-600/75", // 7. Active link style for both modes
-                        "data-[active]:text-neutral-900 dark:data-[active]:text-neutral-100" //
-                    )}
-                >
-                    {children}
-                </NavigationMenuLink>
-            </Link>
+
+            <NavigationMenuLink
+                href={href}
+                className={cn(
+                    navigationMenuTriggerStyle(),                // 1. Apply base Shadcn styles
+                    "bg-transparent",                            // 2. Override default background to transparent
+                    "text-neutral-900 dark:text-neutral-100",    // 3. Set text color: dark text for light mode, light text for dark mode
+                    "hover:bg-neutral-200 dark:hover:bg-neutral-700/60", // 4. Hover background: light grey for light mode, dark grey for dark mode
+                    "hover:text-neutral-900 dark:hover:text-neutral-100", // 5. Ensure text color matches mode on hover
+                    "focus:bg-neutral-200 dark:focus:bg-neutral-700/60", // 6. Consistent focus style for both modes
+                    "focus:text-neutral-900 dark:focus:text-neutral-100", //
+                    "data-[active]:bg-neutral-300 dark:data-[active]:bg-neutral-600/75", // 7. Active link style for both modes
+                    "data-[active]:text-neutral-900 dark:data-[active]:text-neutral-100" //
+                )}
+            >
+                {children}
+            </NavigationMenuLink>
         </NavigationMenuItem>
     );
 };
@@ -94,50 +94,9 @@ export async function NavigationBar() {
     return (
         <NavigationMenu>
             <NavigationMenuList>
-                {/* <NavigationMenuItem>
-                    <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
-                    <NavigationMenuContent>
-                        <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-                            <li className="row-span-3">
-                                <NavigationMenuLink asChild>
-                                    <Link
-                                        className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                                        href="/"
-                                    >
-                                        <div className="font-black">Harmony</div>
-                                        <div className="mb-2 mt-4 text-lg font-medium">
-                                            shadcn/ui
-                                        </div>
-                                        <p className="text-sm leading-tight text-muted-foreground">
-                                            Beautifully designed components built with Radix UI and
-                                            Tailwind CSS.
-                                        </p>
-                                    </Link>
-                                </NavigationMenuLink>
-                            </li>
-                            <ListItem href="/docs" title="Introduction">
-                                Re-usable components built using Radix UI and Tailwind CSS.
-                            </ListItem>
-                            <ListItem href="/docs/installation" title="Installation">
-                                How to install dependencies and structure your app.
-                            </ListItem>
-                            <ListItem href="/docs/primitives/typography" title="Typography">
-                                Styles for headings, paragraphs, lists...etc
-                            </ListItem>
-                        </ul>
-                    </NavigationMenuContent>
-                </NavigationMenuItem> */}
                 <div className="p-4 max-w-md mx-auto">
                     <SearchBar
-                        /* value={'searchValue'} */
-                        /* onChange={() => { console.log('Search input changed'); }} // Handle search input change)} */
-                    // You can pass any standard HTML input attributes here
-                    // id="main-search"
-                    // name="search"
-                    // className="custom-search-style"
                     />
-                    {/* Optionally display the current search value */}
-                    {/* {searchValue && <p className="mt-2 text-sm">Searching for: {searchValue}</p>} */}
                 </div>
                 <NavigationMenuItem>
                     <NavigationMenuTrigger
@@ -176,12 +135,14 @@ export async function NavigationBar() {
                         session ?
                             <AvatarMenu avatarUrl={session.user.image?.toString() ?? ""} />
                             :
-                            <Link
-                                className={cn(buttonVariants({ variant: "outline" }), "rounded-full")}
-                                href={"/login"}
-                                legacyBehavior>
-                                Login <FaArrowAltCircleRight />
-                            </Link>
+                            <Button asChild>
+                                <Link
+                                    href="/login"
+                                    className={cn(buttonVariants({ variant: "outline" }), "rounded-full")}
+                                >
+                                    Login <FaArrowAltCircleRight />
+                                </Link>
+                            </Button>
                     }
                 </NavigationMenuItem>
             </NavigationMenuList>
