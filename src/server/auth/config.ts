@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+// Correct import
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { type DefaultSession, type NextAuthConfig } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
@@ -35,7 +36,7 @@ export const authConfig = {
         email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials) {
+      /* async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
           return null; // Return null if credentials are missing
         }
@@ -48,8 +49,6 @@ export const authConfig = {
 
         if (error) {
           console.error("Supabase sign-in error:", error.message);
-          // Return null to indicate authentication failure
-          // NextAuth.js will redirect to /api/auth/error?error=CredentialsSignin
           return null;
         }
 
@@ -105,11 +104,25 @@ export const authConfig = {
         }
 
         return null; // Return null if authentication fails
-      },
+      }, */
     }),
   ],
   adapter: PrismaAdapter(db),
   callbacks: {
+    jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.role = user.role;
+        token.active = user.active;
+        token.createdAt = user.createdAt;
+        token.updatedAt = user.updatedAt;
+      }
+      return token;
+    },
+    /* session({ session, token }) {
+      session.user.role = token.role;
+      return session;
+    }, */
     session: ({ session, user }) => ({
       ...session,
       user: {
@@ -117,6 +130,22 @@ export const authConfig = {
         id: user.id,
       },
     }),
+    redirect({ url, baseUrl }) {
+      return `${baseUrl}/userInfo`;
+    },
+    async signIn({ user, account, profile }) {
+      console.log("==================================", user, account, profile);
+      if (account?.provider === "google" || account?.provider === "discord") {
+        // Check if email_verified is true in profile
+        if (profile?.email_verified) {
+          await db.user.update({
+            where: { id: user.id },
+            data: { emailVerified: new Date() },
+          });
+        }
+      }
+      return true;
+    },
   },
   pages: {
     signIn: "/login", // Custom login page
