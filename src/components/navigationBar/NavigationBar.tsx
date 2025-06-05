@@ -137,7 +137,7 @@ export async function NavigationBar() {
                             :
                             <Button asChild className="rounded-full">
                                 <Link href="/login" >
-                                    Login <div className="p-1 hover:bg-gray-50 hover:rounded-full scale-110 hover:scale-100 transition-all duration-300"><FaArrowAltCircleRight /></div>
+                                    Login <div className="p-1 hover:bg-gray-50 hover:rounded-full hover:text-black  transition-all duration-300"><FaArrowAltCircleRight /></div>
                                 </Link>
                             </Button>
                     }
