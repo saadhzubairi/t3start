@@ -4,7 +4,6 @@ import "./misc.css"
 
 const FullPageSpinner = ({ message }: { message: string }) => {
     return (
-
         <div className="flex items-center justify-center w-full h-[100vh] relative  ">
             {/* Background Shapes */}
             <div className="absolute inset-0 -z-10 overflow-hidden bg-custom bg-custom-lightAccent fade-in-only">

@@ -5,7 +5,6 @@
 import React, { useEffect, useState } from 'react'; // Import useState
 import "../authStyle.css"; // Ensure styles here don't override dark mode colors for backgrounds/text
 import Image from 'next/image';
-import { FaDiscord, FaGoogle } from "react-icons/fa";
 import { Input } from '~/components/ui/input';
 import { Button } from '~/components/ui/button';
 import { Separator } from '~/components/ui/separator';
@@ -29,6 +28,7 @@ import ViewfinderLogo from '~/components/misc/Logo';
 import { ModeToggle } from '~/components/navigationBar/DarkModeToggle';
 import { signIn } from 'next-auth/react'; // Import signIn for OAuth providers
 import Link from 'next/link'; // Import Link
+import SocialMediaLogins from '../socialMediaLogins';
 
 const formSchema = z.object({
   email: z
@@ -178,7 +178,8 @@ const SignupPage = () => {
                       </FormItem>
                     )}
                   />
-                  <FormField
+                  {
+                    false && (<FormField
                     control={form.control}
                     name="confirmPassword"
                     render={({ field }) => (
@@ -190,7 +191,8 @@ const SignupPage = () => {
                         <FormMessage />
                       </FormItem>
                     )}
-                  />
+                  />)
+                  }
                   <div className="gap-2 flex items-center justify-start">
                     <Checkbox id="terms" />
                     <Label htmlFor="terms" className="text-neutral-700 dark:text-neutral-300 font-medium">
@@ -204,32 +206,9 @@ const SignupPage = () => {
                   </div>
                 </form>
               </Form>
-              <Separator className='my-4' />
+              
               <div className="w-full">
-                <div className="flex justify-between items-center w-full gap-2 flex-col">
-                  {/* Changed the Link to a Button for consistency with other social sign-up buttons */}
-                  <Button
-                    className='text-blue-600 dark:text-blue-400 border-blue-600 dark:border-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-xs w-full'
-                    variant={'outline'}
-                    onClick={() => router.push('/login')}
-                  >
-                    Go to Login
-                  </Button>
-                  <Button
-                    className='text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 border-indigo-600 dark:border-indigo-400 text-xs w-full flex items-center justify-center gap-2'
-                    variant={'outline'}
-                    onClick={() => signIn('discord')} // Actual call to NextAuth.js
-                  >
-                    <FaDiscord className="w-4 h-4" /> Sign up using Discord
-                  </Button>
-                  <Button
-                    className='text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 border-red-600 dark:border-red-400 text-xs w-full flex items-center justify-center gap-2'
-                    variant={'outline'}
-                    onClick={() => signIn('google')} // Actual call to NextAuth.js
-                  >
-                    <FaGoogle className="w-4 h-4" /> Sign up using Google
-                  </Button>
-                </div>
+                <SocialMediaLogins />
               </div>
             </div>
           </div>

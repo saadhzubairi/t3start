@@ -19,11 +19,6 @@ interface LogoProps {
   className?: string;
 }
 
-/**
- * ViewfinderLogo component.
- * Displays the "Viewfinder" text as a link, styled with the Major Mono Display font.
- * Adjusts color based on the current theme, preventing hydration errors.
- */
 const ViewfinderLogo: React.FC<LogoProps> = ({
   size = '2rem',
   href = '/',

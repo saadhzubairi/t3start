@@ -29,6 +29,7 @@ import ViewfinderLogo from '~/components/misc/Logo';
 import { ModeToggle } from '~/components/navigationBar/DarkModeToggle';
 import Link from 'next/link';
 import { cn } from '~/lib/utils';
+import SocialMediaLogins from '../socialMediaLogins';
 // import { cn } from '~/lib/utils'; // Only needed if you use cn function here
 
 const formSchema = z.object({
@@ -84,9 +85,9 @@ const LoginPage = ({ session }: { session: Session | null }) => {
         };
       case 'verifyEmail': // Message from successful Supabase signup requiring verification
         return {
-            title: "Account Created!",
-            description: "Please check your email to verify your account before logging in.",
-            variant: "default" as const, // Or a different variant like "success" if you have one
+          title: "Account Created!",
+          description: "Please check your email to verify your account before logging in.",
+          variant: "default" as const, // Or a different variant like "success" if you have one
         };
       default:
         return {
@@ -234,26 +235,8 @@ const LoginPage = ({ session }: { session: Session | null }) => {
                   </div>
                 </form>
               </Form>
-              <Separator className='my-4' />
               <div className="w-full">
-                <div className="flex justify-between items-center w-full gap-2 flex-col">
-                  {/* Changed to Link for proper navigation */}
-                  <Link href="/signup" className={cn(buttonVariants({ variant: "outline" }), 'text-blue-600 dark:text-blue-400 border-blue-600 dark:border-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-xs w-full')}>Sign up</Link>
-                  <Button
-                    className='text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 border-indigo-600 dark:border-indigo-400 text-xs w-full flex items-center justify-center gap-2'
-                    variant={'outline'}
-                    onClick={() => signIn('discord')}
-                  >
-                    <FaDiscord className="w-4 h-4" /> Login using Discord
-                  </Button>
-                  <Button
-                    className='text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 border-red-600 dark:border-red-400 text-xs w-full flex items-center justify-center gap-2'
-                    variant={'outline'}
-                    onClick={() => signIn('google')}
-                  >
-                    <FaGoogle className="w-4 h-4" /> Login using Google
-                  </Button>
-                </div>
+                <SocialMediaLogins />
               </div>
             </div>
           </div>
