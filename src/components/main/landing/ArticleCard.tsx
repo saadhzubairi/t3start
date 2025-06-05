@@ -55,7 +55,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
             </p>
         </div>
         <CardTitle className="text-lg sm:text-xl font-semibold leading-tight hover:text-primary transition-colors">
-          <Link href={article.articleUrl}>{article.title}</Link>
+          <Link href={article.articleUrl} legacyBehavior>{article.title}</Link>
         </CardTitle>
       </CardHeader>
       <CardContent className="flex-grow py-2">

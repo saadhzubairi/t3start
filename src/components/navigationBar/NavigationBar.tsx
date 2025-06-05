@@ -178,14 +178,15 @@ export async function NavigationBar() {
                             :
                             <Link
                                 className={cn(buttonVariants({ variant: "outline" }), "rounded-full")}
-                                href={"/login"} >
+                                href={"/login"}
+                                legacyBehavior>
                                 Login <FaArrowAltCircleRight />
                             </Link>
                     }
                 </NavigationMenuItem>
             </NavigationMenuList>
         </NavigationMenu>
-    )
+    );
 }
 
 const ListItem = React.forwardRef<

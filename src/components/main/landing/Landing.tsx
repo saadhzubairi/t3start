@@ -53,7 +53,7 @@ const Landing = () => {
             <p className='text-lg sm:text-xl text-zinc-300 max-w-xl mb-8'>
               Exploring the intersection of design, innovation, and the built environment.
             </p>
-            <Link href="#featured-articles" passHref>
+            <Link href="#featured-articles" passHref legacyBehavior>
               <Button variant="outline" className='bg-transparent border-custom-lightAccent text-custom-lightAccent hover:bg-custom-lightAccent hover:text-custom-dark transition-colors duration-300 text-lg px-8 py-3'>
                 Explore Articles <FaArrowRight className='ml-2.5 w-5 h-5' />
               </Button>
@@ -61,8 +61,6 @@ const Landing = () => {
           </div>
         </ScrollAnimated>
       </div >
-
-
       {/* MAIN CONTENT SECTION */}
       < div className='flex-grow container mx-auto px-6 lg:px-8 py-16' >
         {/* Featured Articles Section */}
@@ -115,7 +113,7 @@ const Landing = () => {
               <p className='text-lg text-gray-600 dark:text-zinc-400 mb-6'>
                 Harmony Arch is a curated space for architects, designers, and enthusiasts to explore the evolving world of architecture. We delve into groundbreaking projects, innovative materials, and the philosophies that shape our built environment. Our mission is to inspire and inform, fostering a deeper appreciation for the art and science of architecture.
               </p>
-              <Link href="/about" passHref>
+              <Link href="/about" passHref legacyBehavior>
                 <Button variant="outline" className='bg-transparent border-gray-700 dark:border-custom-midAccent text-gray-700 dark:text-custom-midAccent hover:bg-gray-700 hover:text-white dark:hover:bg-custom-midAccent dark:hover:text-custom-dark transition-colors duration-300 text-md px-6 py-2.5'>
                   Learn More About Us
                 </Button>
@@ -150,8 +148,6 @@ const Landing = () => {
           </section>
         </ScrollAnimated>
       </div >
-
-
       {/* Decorative Abstract Shapes - Kept subtle */}
       {/* < div className='relative isolate -z-10' >
         <div
@@ -181,7 +177,7 @@ const Landing = () => {
       </div > */}
       <Footer />
     </div >
-  )
+  );
 }
 
 
