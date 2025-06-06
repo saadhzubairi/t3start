@@ -113,11 +113,11 @@ const Landing = () => {
               <p className='text-lg text-gray-600 dark:text-zinc-400 mb-6'>
                 Harmony Arch is a curated space for architects, designers, and enthusiasts to explore the evolving world of architecture. We delve into groundbreaking projects, innovative materials, and the philosophies that shape our built environment. Our mission is to inspire and inform, fostering a deeper appreciation for the art and science of architecture.
               </p>
-              <Link href="/about" passHref legacyBehavior>
-                <Button variant="outline" className='bg-transparent border-gray-700 dark:border-custom-midAccent text-gray-700 dark:text-custom-midAccent hover:bg-gray-700 hover:text-white dark:hover:bg-custom-midAccent dark:hover:text-custom-dark transition-colors duration-300 text-md px-6 py-2.5'>
+              <Button asChild variant="outline" className='bg-transparent border-gray-700 dark:border-custom-midAccent text-gray-700 dark:text-custom-midAccent hover:bg-gray-700 hover:text-white dark:hover:bg-custom-midAccent dark:hover:text-custom-dark transition-colors duration-300 text-md px-6 py-2.5'>
+                <Link href="/about" passHref>
                   Learn More About Us
-                </Button>
-              </Link>
+                </Link>
+              </Button>
             </div>
           </section>
         </ScrollAnimated>

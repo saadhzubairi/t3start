@@ -12,11 +12,11 @@ export async function middleware(req: NextRequest) {
   console.log("*****************************************")
   console.log("*****************************************")
   console.log("*****************************************")
-  console.log("*****************************************") */
+  console.log("*****************************************")
   const protectedRoutes = ["/dashboard", "/userInfo", "/admin"];
   const url = req.nextUrl.clone();
   // Redirect unauthenticated users from protected routes to login
-  /* if (!token && protectedRoutes.some((path) => url.pathname.startsWith(path))) {
+  if (!token && protectedRoutes.some((path) => url.pathname.startsWith(path))) {
     url.pathname = "/slashRouter";
     return NextResponse.redirect(url);
   }

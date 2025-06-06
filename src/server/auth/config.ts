@@ -21,6 +21,10 @@ declare module "next-auth" {
       emailVerified?: Date | null; // Add if you need it on the session user
     } & DefaultSession["user"]; // DefaultSession["user"] provides name, email, image
   }
+  interface User {
+    role?: ROLE;
+    active?: boolean;
+  }
 }
 
 export const authConfig = {
@@ -113,20 +117,15 @@ export const authConfig = {
   ],
   adapter: PrismaAdapter(db),
   callbacks: {
-    /* jwt({ token, user }) {
+    jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        token.email = user.email;
         token.role = user.role;
         token.active = user.active;
-        token.createdAt = user.createdAt;
-        token.updatedAt = user.updatedAt;
       }
       return token;
-    }, */
-    /* session({ session, token }) {
-      session.user.role = token.role;
-      return session;
-    }, */
+    },
     session: ({ session, user }) => ({
       ...session,
       user: {
@@ -144,7 +143,7 @@ export const authConfig = {
     async signIn({ user, account, profile }) {
       if (account?.provider === "google" || account?.provider === "discord") {
         if (profile?.email_verified === null || profile?.email_verified === undefined) {
-          const lala = await db.user.update({
+          await db.user.update({
             where: { id: user.id },
             data: { emailVerified: new Date() },
           });
@@ -153,7 +152,7 @@ export const authConfig = {
       return true;
     },
   },
-pages: {
+  pages: {
     signIn: "/login", // Custom login page
     error: "/login",
   },
