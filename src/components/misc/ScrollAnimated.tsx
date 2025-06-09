@@ -52,7 +52,7 @@ const ScrollAnimated: React.FC<ScrollAnimatedProps> = ({
   }, [threshold]);
 
   const delayClass = delay ? `delay-${delay}` : '';
-  const combinedClassName = `${animationClass} ${isVisible ? 'is-visible' : ''} ${delayClass} ${className || ''}`.trim();
+  const combinedClassName = `${animationClass} ${isVisible ? 'is-visible' : ''} ${delayClass} ${className ?? ''}`.trim();
 
   return (
     <Tag ref={domRef as any} className={combinedClassName} {...rest}>

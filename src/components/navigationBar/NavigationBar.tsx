@@ -85,51 +85,52 @@ export async function NavigationBar() {
 
     const session = await auth();
 
-    if (session?.user) {
-        void api.post.getLatest.prefetch();
-    }
-
-
-
     return (
         <NavigationMenu>
             <NavigationMenuList>
-                <div className="p-4 max-w-md mx-auto">
-                    <SearchBar
-                    />
-                </div>
-                <NavigationMenuItem>
-                    <NavigationMenuTrigger
-                        className={cn(
-                            navigationMenuTriggerStyle(),                // 1. Apply base Shadcn styles
-                            "bg-transparent",                            // 2. Override default background to transparent
-                            "text-neutral-900 dark:text-neutral-100",    // 3. Set text color: dark text for light mode, light text for dark mode
-                            "hover:bg-neutral-200 dark:hover:bg-neutral-700/60", // 4. Hover background: light grey for light mode, dark grey for dark mode
-                            "hover:text-neutral-900 dark:hover:text-neutral-100", // 5. Ensure text color matches mode on hover
-                            "focus:bg-neutral-200 dark:focus:bg-neutral-700/60", // 6. Consistent focus style for both modes
-                            "focus:text-neutral-900 dark:focus:text-neutral-100", //
-                            "data-[active]:bg-neutral-300 dark:data-[active]:bg-neutral-600/75", // 7. Active link style for both modes
-                            "data-[active]:text-neutral-900 dark:data-[active]:text-neutral-100" //
-                        )}
-                    >Tags</NavigationMenuTrigger>
-                    <NavigationMenuContent>
-                        <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-                            {components.map((component) => (
-                                <ListItem
-                                    key={component.title}
-                                    title={component.title}
-                                    href={component.href}
-                                >
-                                    {component.description}
-                                </ListItem>
-                            ))}
-                        </ul>
-                    </NavigationMenuContent>
-                </NavigationMenuItem>
-                {/* Using the new NavLinkItem component */}
 
-                <NavLinkItem href="/docs/theory-practice">Field Notes</NavLinkItem>
-                <NavLinkItem href="/docs/theory-practice">Editorials</NavLinkItem>
+                {session?.user.role !== 'PREUSER' &&
+                    (<>
+                        <div className="p-4 max-w-md mx-auto">
+                            <SearchBar
+                            />
+                        </div>
+                        <NavigationMenuItem>
+                            <NavigationMenuTrigger
+                                className={cn(
+                                    navigationMenuTriggerStyle(),                // 1. Apply base Shadcn styles
+                                    "bg-transparent",                            // 2. Override default background to transparent
+                                    "text-neutral-900 dark:text-neutral-100",    // 3. Set text color: dark text for light mode, light text for dark mode
+                                    "hover:bg-neutral-200 dark:hover:bg-neutral-700/60", // 4. Hover background: light grey for light mode, dark grey for dark mode
+                                    "hover:text-neutral-900 dark:hover:text-neutral-100", // 5. Ensure text color matches mode on hover
+                                    "focus:bg-neutral-200 dark:focus:bg-neutral-700/60", // 6. Consistent focus style for both modes
+                                    "focus:text-neutral-900 dark:focus:text-neutral-100", //
+                                    "data-[active]:bg-neutral-300 dark:data-[active]:bg-neutral-600/75", // 7. Active link style for both modes
+                                    "data-[active]:text-neutral-900 dark:data-[active]:text-neutral-100" //
+                                )}
+                            >Tags</NavigationMenuTrigger>
+                            <NavigationMenuContent>
+                                <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+                                    {components.map((component) => (
+                                        <ListItem
+                                            key={component.title}
+                                            title={component.title}
+                                            href={component.href}
+                                        >
+                                            {component.description}
+                                        </ListItem>
+                                    ))}
+                                </ul>
+                            </NavigationMenuContent>
+                        </NavigationMenuItem>
+                        {/* Using the new NavLinkItem component */}
+
+                        <NavLinkItem href="/docs/theory-practice">Field Notes</NavLinkItem>
+                        <NavLinkItem href="/docs/theory-practice">Editorials</NavLinkItem>
+
+                    </>)
+
+                }
                 <NavigationMenuItem>
                     {
                         session ?
