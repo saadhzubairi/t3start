@@ -21,17 +21,19 @@ model User {
     id            String    @id @default(uuid()) @db.Uuid
     name          String?
     email         String?   @unique
+    username      String?   @unique
     emailVerified DateTime?
     image         String?
+    bio           String?
     role          ROLE      @default(PREUSER)
     active        Boolean   @default(true)
     createdAt     DateTime  @default(now())
     updatedAt     DateTime  @updatedAt
     // relations
-    posts    Post[]
-    comments Comment[]
-    accounts Account[]
-    sessions Session[]
+    posts         Post[]
+    comments      Comment[]
+    accounts      Account[]
+    sessions      Session[]
 }
 
 // POSTS ----------------------------------------------------------------------
@@ -61,11 +63,11 @@ model Comment {
     text      String
     createdAt DateTime @default(now())
     // which post
-    post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
-    postId String @db.Uuid
+    post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+    postId    String   @db.Uuid
     // which user wrote it
-    author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
-    authorId String @db.Uuid
+    author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+    authorId  String   @db.Uuid
 }
 
 // NEXTAUTH: ACCOUNTS, SESSIONS, VERIFICATION TOKENS -------------------------
@@ -84,7 +86,8 @@ model Account {
     id_token                 String?
     session_state            String?
     refresh_token_expires_in Int?
-    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
     @@unique([provider, providerAccountId])
 }
 
@@ -93,7 +96,7 @@ model Session {
     sessionToken String   @unique
     userId       String   @db.Uuid
     expires      DateTime
-    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model VerificationToken {
@@ -101,5 +104,6 @@ model VerificationToken {
     identifier String
     token      String   @unique
     expires    DateTime
+
     @@unique([identifier, token])
 }
