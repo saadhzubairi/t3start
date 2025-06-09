@@ -4,8 +4,8 @@ import { Button } from "~/components/ui/button";
 
 const LogOutButton = () => {
     return <div>
-        <Button asChild>
-            <Link href={'/api/auth/signout'}>logout</Link>
+        <Button asChild variant={'destructive'}>
+            <Link href={'/api/auth/signout'}>Log Out</Link>
         </Button>
     </div>;
 };
